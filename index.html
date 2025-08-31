@@ -220,98 +220,44 @@
                                 <div><h4 class="text-xl font-semibold text-accent mb-2">Reciprocal Ride System & Trusted Circles</h4><ul class="list-disc list-inside space-y-2"><li><strong class="font-semibold">Incentive Program:</strong> Drivers earn "Ride Credits" for every trip.</li><li><strong class="font-semibold">Credit Redemption:</strong> Credits can be used to subsidize or fully pay for their own rides.</li><li><strong class="font-semibold">Trusted Circles:</strong> Create or join verified groups to prioritize matches within your social or professional network.</li><li><strong class="font-semibold">Community Badges:</strong> Earn badges to build credibility and trust within the network.</li></ul></div>
                             </div>
                         </div>
-                        <div class="bg-white rounded-xl shadow-xl p-6 sm:p-8 w-full max-w-2xl mx-auto text-gray-800">
-                            <h1 class="text-3xl sm:text-4xl font-bold text-center text-gray-800 mb-2">TripSync Pricing</h1>
-                            <p class="text-center text-gray-500 mb-8">Calculate the estimated cost for your TripSync ride.</p>
-                            
-                            <div class="space-y-6">
-                                <div>
-                                    <label for="distance_tripsync" class="block text-sm font-medium text-gray-700 mb-1">Distance (km)</label>
-                                    <input type="number" id="distance_tripsync" placeholder="e.g., 10" class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200">
-                                </div>
-                                <div>
-                                    <label for="traffic_tripsync" class="block text-sm font-medium text-gray-700 mb-1">Traffic Level</label>
-                                    <select id="traffic_tripsync" class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200">
-                                        <option value="low">Low</option>
-                                        <option value="medium">Medium</option>
-                                        <option value="high">High</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label for="seats_tripsync" class="block text-sm font-medium text-gray-700 mb-1">Seats Required</label>
-                                    <input type="number" id="seats_tripsync" placeholder="e.g., 1" class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200">
-                                </div>
-                                <div>
-                                    <label for="car_type_tripsync" class="block text-sm font-medium text-gray-700 mb-1">Car Type</label>
-                                    <select id="car_type_tripsync" class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200">
-                                        <option value="sedan">Sedan</option>
-                                        <option value="suv">SUV</option>
-                                        <option value="luxury">Luxury</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label for="day_time_tripsync" class="block text-sm font-medium text-gray-700 mb-1">Time of Day</label>
-                                    <select id="day_time_tripsync" class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200">
-                                        <option value="morning">Morning (6 AM - 12 PM)</option>
-                                        <option value="evening">Evening (4 PM - 10 PM)</option>
-                                        <option value="night">Night (10 PM - 6 AM)</option>
-                                    </select>
-                                </div>
-                                <button id="calculateBtn_tripsync" class="w-full bg-blue-600 text-white font-semibold py-3 rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-transform transform active:scale-95 duration-200">
-                                    Calculate Price
-                                </button>
+                        <div class="mt-12 max-w-xl mx-auto p-8 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 rounded-2xl shadow-2xl">
+                          <h3 class="text-3xl font-bold mb-6 text-accent text-center">TripSync Price Calculator</h3>
+                          <form id="tripsync-form" class="grid grid-cols-1 gap-6">
+                            <div>
+                              <label for="ts-distance" class="block text-sm font-semibold text-gray-300 mb-2">Distance (km)</label>
+                              <input type="number" id="ts-distance" placeholder="Enter distance" class="w-full px-4 py-2 rounded-lg bg-gray-700 text-white border border-gray-600 focus:ring-accent focus:border-accent" required>
                             </div>
-                            
-                            <!-- Pricing Results Display -->
-                            <div id="results_tripsync" class="mt-8 hidden">
-                                <h2 class="text-2xl font-semibold text-gray-800 mb-4 text-center">Pricing Details</h2>
-                                <div class="space-y-4">
-                                    <div class="bg-gray-100 p-4 rounded-lg flex justify-between items-center">
-                                        <span class="text-sm sm:text-base font-medium text-gray-700">Client Price:</span>
-                                        <span id="clientPrice_tripsync" class="text-lg sm:text-xl font-bold text-blue-600">₹0.00</span>
-                                    </div>
-                                    <div class="bg-gray-100 p-4 rounded-lg flex justify-between items-center">
-                                        <span class="text-sm sm:text-base font-medium text-gray-700">Driver Payout:</span>
-                                        <span id="driverPayout_tripsync" class="text-lg sm:text-xl font-bold text-blue-600">₹0.00</span>
-                                    </div>
-                                    <div class="bg-gray-100 p-4 rounded-lg flex justify-between items-center">
-                                        <span class="text-sm sm:text-base font-medium text-gray-700">Your Company's Profit:</span>
-                                        <span id="companyProfit_tripsync" class="text-lg sm:text-xl font-bold text-purple-600">₹0.00</span>
-                                    </div>
-                                </div>
+                            <div>
+                              <label for="ts-seats" class="block text-sm font-semibold text-gray-300 mb-2">Seats Left</label>
+                              <input type="number" id="ts-seats" min="1" max="4" placeholder="1-4" class="w-full px-4 py-2 rounded-lg bg-gray-700 text-white border border-gray-600 focus:ring-accent focus:border-accent" required>
                             </div>
-                            <div class="bg-card rounded-xl shadow-xl p-6 sm:p-8 w-full max-w-2xl mx-auto text-gray-200 mt-12">
-                                <h2 class="text-2xl font-bold text-center text-white mb-6">TripSync Plan & Details</h2>
-                                <div id="tripsync-plan-details" class="space-y-6">
-                                    <div id="planned-details" class="bg-gray-700/50 p-6 rounded-lg">
-                                        <h3 class="text-xl font-semibold text-blue-400 mb-2">Planned Ride</h3>
-                                        <p class="text-gray-400"><strong>Fare Range:</strong> ₹10 - ₹15 per km (plus base fare)</p>
-                                        <ul class="list-disc list-inside space-y-2 mt-2 text-sm text-gray-400">
-                                            <li><strong>Description:</strong> Book your ride in advance. Most affordable and eco-friendly option.</li>
-                                            <li><strong>Cancellation Fee:</strong> ₹50 (if cancelled within 15 minutes of scheduled pickup)</li>
-                                            <li><strong>Note:</strong> Not suitable for urgent or on-demand trips.</li>
-                                        </ul>
-                                    </div>
-                                    <div id="basic-details" class="bg-gray-700/50 p-6 rounded-lg hidden">
-                                        <h3 class="text-xl font-semibold text-blue-400 mb-2">On-Demand Basic</h3>
-                                        <p class="text-gray-400"><strong>Fare Range:</strong> ₹15 - ₹20 per km (plus base fare)</p>
-                                        <ul class="list-disc list-inside space-y-2 mt-2 text-sm text-gray-400">
-                                            <li><strong>Description:</strong> Request a ride for immediate pick-up. A driver from our network will accept if their route aligns.</li>
-                                            <li><strong>Cancellation Fee:</strong> ₹100</li>
-                                            <li><strong>Note:</strong> Waiting time may vary based on driver availability.</li>
-                                        </ul>
-                                    </div>
-                                    <div id="premium-details" class="bg-gray-700/50 p-6 rounded-lg hidden">
-                                        <h3 class="text-xl font-semibold text-blue-400 mb-2">On-Demand Premium</h3>
-                                        <p class="text-gray-400"><strong>Fare Range:</strong> ₹20 - ₹25 per km (plus base fare)</p>
-                                        <ul class="list-disc list-inside space-y-2 mt-2 text-sm text-gray-400">
-                                            <li><strong>Description:</strong> Priority matching and a guaranteed pickup. A driver from a dedicated pool will be assigned to your request.</li>
-                                            <li><strong>Cancellation Fee:</strong> ₹150</li>
-                                            <li><strong>Note:</strong> Highest fare for guaranteed, fast service.</li>
-                                        </ul>
-                                    </div>
-                                </div>
+                            <div>
+                              <label for="ts-vehicle" class="block text-sm font-semibold text-gray-300 mb-2">Vehicle Type</label>
+                              <select id="ts-vehicle" class="w-full px-4 py-2 rounded-lg bg-gray-700 text-white border border-gray-600 focus:ring-accent focus:border-accent">
+                                <option value="bike">Bike</option>
+                                <option value="hatchback">Car - Hatchback</option>
+                                <option value="sedan">Car - Sedan</option>
+                                <option value="suv">Car - SUV</option>
+                              </select>
                             </div>
+                            <div>
+                              <label for="ts-traffic" class="block text-sm font-semibold text-gray-300 mb-2">Traffic Level</label>
+                              <select id="ts-traffic" class="w-full px-4 py-2 rounded-lg bg-gray-700 text-white border border-gray-600 focus:ring-accent focus:border-accent">
+                                <option value="low">Low</option>
+                                <option value="medium">Medium</option>
+                                <option value="high">High</option>
+                              </select>
+                            </div>
+                            <div>
+                              <label for="ts-time" class="block text-sm font-semibold text-gray-300 mb-2">Time of Day</label>
+                              <select id="ts-time" class="w-full px-4 py-2 rounded-lg bg-gray-700 text-white border border-gray-600 focus:ring-accent focus:border-accent">
+                                <option value="day">Day</option>
+                                <option value="night">Night</option>
+                              </select>
+                            </div>
+                            <button id="ts-calc-btn" type="button" class="w-full mt-4 py-3 bg-accent text-white font-bold rounded-lg shadow-lg hover:bg-blue-700 transition">Calculate</button>
+                          </form>
+                          <div id="ts-result" class="mt-6 text-lg font-semibold text-center text-blue-300"></div>
                         </div>
                     </section>
                 `,
@@ -371,77 +317,24 @@
                                 <div><h4 class="text-xl font-semibold text-accent mb-2">Driver Earning & Motivation</h4><ul class="list-disc list-inside space-y-2"><li><strong class="font-semibold">Passive Income:</strong> Drivers earn a commission for each package transported.</li><li><strong class="font-semibold">"Load Alerts":</strong> Drivers can receive alerts for packages that match their planned routes.</li></ul></div>
                             </div>
                         </div>
-                        <div class="bg-white rounded-xl shadow-xl p-6 sm:p-8 w-full max-w-2xl mx-auto text-gray-800">
-                            <h1 class="text-3xl sm:text-4xl font-bold text-center text-gray-800 mb-2">FluxLoad Pricing</h1>
-                            <p class="text-center text-gray-500 mb-8">Calculate costs for clients, payouts for drivers, and your company's profit.</p>
-                            
-                            <!-- Input Form for Pricing Filters -->
-                            <div class="space-y-6">
-                                <div>
-                                    <label for="distance_fluxload" class="block text-sm font-medium text-gray-700 mb-1">Distance (km)</label>
-                                    <input type="number" id="distance_fluxload" placeholder="e.g., 50" class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-emerald-500 focus:border-emerald-500 transition-colors duration-200">
-                                </div>
-                                <div>
-                                    <label for="weight_fluxload" class="block text-sm font-medium text-gray-700 mb-1">Cargo Weight (kg)</label>
-                                    <input type="number" id="weight_fluxload" placeholder="e.g., 10" class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-emerald-500 focus:border-emerald-500 transition-colors duration-200">
-                                </div>
-                                <div>
-                                    <label for="delivery_time_fluxload" class="block text-sm font-medium text-gray-700 mb-1">Time to Delivery (days)</label>
-                                    <input type="number" id="delivery_time_fluxload" placeholder="e.g., 3" class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-emerald-500 focus:border-emerald-500 transition-colors duration-200">
-                                </div>
-
-                                <button id="calculateBtn_fluxload" class="w-full bg-emerald-600 text-white font-semibold py-3 rounded-lg shadow-lg hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 transition-transform transform active:scale-95 duration-200">
-                                    Calculate Price
-                                </button>
+                        <div class="mt-12 max-w-xl mx-auto p-8 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 rounded-2xl shadow-2xl">
+                          <h3 class="text-3xl font-bold mb-6 text-accent text-center">FluxLoad Price Calculator</h3>
+                          <form id="fluxload-form" class="grid grid-cols-1 gap-6">
+                            <div>
+                              <label for="fl-weight" class="block text-sm font-semibold text-gray-300 mb-2">Weight (kg)</label>
+                              <input type="number" id="fl-weight" placeholder="Enter weight" class="w-full px-4 py-2 rounded-lg bg-gray-700 text-white border border-gray-600 focus:ring-accent focus:border-accent" required>
                             </div>
-
-                            <!-- Pricing Results Display -->
-                            <div id="results_fluxload" class="mt-8 hidden">
-                                <h2 class="text-2xl font-semibold text-gray-800 mb-4 text-center">Pricing Details</h2>
-                                <div class="space-y-4">
-                                    <div class="bg-gray-100 p-4 rounded-lg flex justify-between items-center">
-                                        <span class="text-sm sm:text-base font-medium text-gray-700">Client Price:</span>
-                                        <span id="clientPrice_fluxload" class="text-lg sm:text-xl font-bold text-emerald-600">₹0.00</span>
-                                    </div>
-                                    <div class="bg-gray-100 p-4 rounded-lg flex justify-between items-center">
-                                        <span class="text-sm sm:text-base font-medium text-gray-700">Driver Payout:</span>
-                                        <span id="driverPayout_fluxload" class="text-lg sm:text-xl font-bold text-blue-600">₹0.00</span>
-                                    </div>
-                                    <div class="bg-gray-100 p-4 rounded-lg flex justify-between items-center">
-                                        <span class="text-sm sm:text-base font-medium text-gray-700">Your Company's Profit:</span>
-                                        <span id="companyProfit_fluxload" class="text-lg sm:text-xl font-bold text-purple-600">₹0.00</span>
-                                    </div>
-                                </div>
+                            <div>
+                              <label for="fl-distance" class="block text-sm font-semibold text-gray-300 mb-2">Distance (km)</label>
+                              <input type="number" id="fl-distance" placeholder="Enter distance" class="w-full px-4 py-2 rounded-lg bg-gray-700 text-white border border-gray-600 focus:ring-accent focus:border-accent" required>
                             </div>
-                            <div class="bg-card rounded-xl shadow-xl p-6 sm:p-8 w-full max-w-2xl mx-auto text-gray-200 mt-12">
-                                <h2 class="text-2xl font-bold text-center text-white mb-6">FluxLoad Plan & Details</h2>
-                                <div id="fluxload-plan-details" class="space-y-6">
-                                    <div id="economy-details" class="bg-gray-700/50 p-6 rounded-lg">
-                                        <h3 class="text-xl font-semibold text-blue-400 mb-2">Economy</h3>
-                                        <p class="text-gray-400"><strong>Price Range:</strong> ₹10 - ₹20 per kg</p>
-                                        <ul class="list-disc list-inside space-y-2 mt-2 text-sm text-gray-400">
-                                            <li><strong>Delivery Time:</strong> 5-7 business days</li>
-                                            <li><strong>Description:</strong> Standard, non-urgent delivery. Most cost-effective.</li>
-                                        </ul>
-                                    </div>
-                                    <div id="standard-details" class="bg-gray-700/50 p-6 rounded-lg hidden">
-                                        <h3 class="text-xl font-semibold text-blue-400 mb-2">Standard</h3>
-                                        <p class="text-gray-400"><strong>Price Range:</strong> ₹20 - ₹30 per kg</p>
-                                        <ul class="list-disc list-inside space-y-2 mt-2 text-sm text-gray-400">
-                                            <li><strong>Delivery Time:</strong> 3-5 business days</li>
-                                            <li><strong>Description:</strong> Moderate speed with a balanced price.</li>
-                                        </ul>
-                                    </div>
-                                    <div id="priority-details" class="bg-gray-700/50 p-6 rounded-lg hidden">
-                                        <h3 class="text-xl font-semibold text-blue-400 mb-2">Priority</h3>
-                                        <p class="text-gray-400"><strong>Price Range:</strong> ₹30 - ₹50 per kg</p>
-                                        <ul class="list-disc list-inside space-y-2 mt-2 text-sm text-gray-400">
-                                            <li><strong>Delivery Time:</strong> 1-3 business days</li>
-                                            <li><strong>Description:</strong> For more time-sensitive packages. Highest price for fastest service.</li>
-                                        </ul>
-                                    </div>
-                                </div>
+                            <div>
+                              <label for="fl-duration" class="block text-sm font-semibold text-gray-300 mb-2">Time Duration (hrs)</label>
+                              <input type="number" id="fl-duration" placeholder="Enter duration" class="w-full px-4 py-2 rounded-lg bg-gray-700 text-white border border-gray-600 focus:ring-accent focus:border-accent" required>
                             </div>
+                            <button id="fl-calc-btn" type="button" class="w-full mt-4 py-3 bg-accent text-white font-bold rounded-lg shadow-lg hover:bg-blue-700 transition">Calculate</button>
+                          </form>
+                          <div id="fl-result" class="mt-6 text-lg font-semibold text-center text-blue-300"></div>
                         </div>
                     </section>
                 `,
@@ -567,8 +460,7 @@
                         </div>
                     </footer>
                 `,
-                // ...existing code...
-credits: `
+                credits: `
     <section id="credits" class="py-20">
       <div class="max-w-5xl mx-auto px-6">
         <h2 class="text-3xl font-bold text-accent mb-6">Credits</h2>
@@ -622,8 +514,7 @@ credits: `
       </div>
     </section>
 `,
-// ...existing code...
-
+                // ...existing code...
             };
 
             // --- Main JavaScript Logic ---
@@ -958,6 +849,79 @@ credits: `
     <!-- AI Chatbox -->
     <div id="godrive-chatbox"></div>
     <script src="chatbot.js"></script>
+<script>
+document.addEventListener('click', function(e) {
+  // TripSync calculator
+  if (e.target && e.target.id === 'ts-calc-btn') {
+    e.preventDefault();
+    const distance = parseFloat(document.getElementById("ts-distance").value);
+    const seatsLeft = parseInt(document.getElementById("ts-seats").value);
+    const vehicle = document.getElementById("ts-vehicle").value;
+    const traffic = document.getElementById("ts-traffic").value;
+    const time = document.getElementById("ts-time").value;
+    let result = document.getElementById("ts-result");
+
+    if (isNaN(distance) || distance <= 0 || isNaN(seatsLeft) || seatsLeft < 1 || seatsLeft > 4) {
+      result.textContent = "Please enter valid values for distance and seats left (1-4).";
+      return;
+    }
+
+    let base = distance * 5;
+    let seat_factor = (4 - seatsLeft) * 0.1;
+
+    let vehicle_factor = 1.0;
+    if (vehicle === "hatchback") vehicle_factor = 1.2;
+    if (vehicle === "sedan") vehicle_factor = 1.5;
+    if (vehicle === "suv") vehicle_factor = 1.8;
+
+    let traffic_factor = 1.0;
+    if (traffic === "medium") traffic_factor = 1.3;
+    if (traffic === "high") traffic_factor = 1.6;
+
+    let time_factor = time === "night" ? 1.2 : 1.0;
+
+    let price = base * vehicle_factor * traffic_factor * time_factor;
+    price = price + (price * seat_factor);
+
+    // Company share: 20%, Driver earns 80%
+    let companyShare = price * 0.20;
+    let driverEarn = price * 0.80;
+
+    result.innerHTML =
+      "Estimated Price: ₹" + price.toFixed(2) +
+      "<br>Driver Earns: ₹" + driverEarn.toFixed(2) +
+      "<br>Company Share: ₹" + companyShare.toFixed(2);
+  }
+
+  // FluxLoad calculator
+  if (e.target && e.target.id === 'fl-calc-btn') {
+    e.preventDefault();
+    const weight = parseFloat(document.getElementById("fl-weight").value);
+    const distance = parseFloat(document.getElementById("fl-distance").value);
+    const duration = parseFloat(document.getElementById("fl-duration").value);
+    let result = document.getElementById("fl-result");
+
+    if (isNaN(weight) || weight <= 0 || isNaN(distance) || distance <= 0 || isNaN(duration) || duration <= 0) {
+      result.textContent = "Please enter valid values for all fields.";
+      return;
+    }
+
+    let base = distance * 4 + weight * 2;
+    let time_factor = 1 + (duration * 0.05);
+
+    let price = base * time_factor;
+
+    // Company share: 15%, Driver earns 85%
+    let companyShare = price * 0.15;
+    let driverEarn = price * 0.85;
+
+    result.innerHTML =
+      "Estimated Price: ₹" + price.toFixed(2) +
+      "<br>Driver Earns: ₹" + driverEarn.toFixed(2) +
+      "<br>Company Share: ₹" + companyShare.toFixed(2);
+  }
+});
+</script>
 </body>
 </html>
 
