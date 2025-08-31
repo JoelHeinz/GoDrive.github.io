@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GoDrive: The Future of Shared Mobility</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <!-- /styles/main.css -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            color: #d1d5db;
+            background: linear-gradient(135deg, #1f2937, #111827, #0f172a);
+            background-size: 400% 400%;
+            animation: gradientAnimation 15s ease infinite;
+        }
+
+        @keyframes gradientAnimation {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .text-accent {
+            color: #4a90e2; 
+        }
+        .bg-card {
+            background-color: rgba(31, 41, 55, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(75, 85, 99, 0.5);
+        }
+        .nav-link.active {
+            color: #ffffff;
+            font-weight: 600;
+        }
+        .tab-button.active {
+            background-color: #4a90e2;
+            color: #fff;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #4b5563;
+        }
+        th {
+            background-color: #374151;
+            font-weight: 600;
+            color: #ffffff;
+        }
+        tr:hover {
+            background-color: rgba(75, 85, 99, 0.2);
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Header & Navigation -->
+    <header class="bg-card shadow-lg sticky top-0 z-50">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#" class="text-3xl font-bold text-white">Go<span class="text-accent">Drive</span></a>
+            <nav class="hidden md:flex space-x-8 text-lg font-medium">
+                <a href="#vision" class="nav-link text-gray-400 hover:text-white transition-colors active">Vision</a>
+                <a href="#tripsync" class="nav-link text-gray-400 hover:text-white transition-colors">TripSync</a>
+                <a href="#fluxload" class="nav-link text-gray-400 hover:text-white transition-colors">FluxLoad</a>
+                <a href="#hubs" class="nav-link text-gray-400 hover:text-white transition-colors">Hubs</a>
+                <a href="#comparison" class="nav-link text-gray-400 hover:text-white transition-colors">Comparison</a>
+                <a href="#contact" class="nav-link text-gray-400 hover:text-white transition-colors">Contact</a>
+                <a href="#credits" class="nav-link">Credits</a>
+                
+
+            </nav>
+            <button class="md:hidden text-gray-400 hover:text-white focus:outline-none">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main id="main-content-area" class="py-16">
+        <!-- Content will be dynamically loaded here by JavaScript -->
+    </main>
+
+    <!-- /javascript/main.js -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const mainContentArea = document.getElementById('main-content-area');
+            const navLinks = document.querySelectorAll('.nav-link');
+
+            // --- Hub Data ---
+            const hubsData = [
+                {
+                    country: "India",
+                    states: [
+                        {
+                            state: "Tamil Nadu",
+                            cities: [
+                                { city: "Chennai", mainHub: { address: "123 Anna Salai, Chennai", pincode: "600002" }, smallHubs: Array.from({ length: 10 }, (_, i) => ({ address: `Small Hub A, Chennai, Street ${i+1}`, pincode: `6000${10 + i}` })) },
+                                { city: "Coimbatore", mainHub: { address: "456 Avinashi Road, Coimbatore", pincode: "641004" }, smallHubs: Array.from({ length: 10 }, (_, i) => ({ address: `Small Hub B, Coimbatore, Street ${i+1}`, pincode: `6410${20 + i}` })) },
+                                { city: "Madurai", mainHub: { address: "789 Othakadai, Madurai", pincode: "625010" }, smallHubs: Array.from({ length: 10 }, (_, i) => ({ address: `Small Hub C, Madurai, Street ${i+1}`, pincode: `6250${30 + i}` })) },
+                                { city: "Trichy", mainHub: { address: "101 Thillai Nagar, Trichy", pincode: "620018" }, smallHubs: Array.from({ length: 10 }, (_, i) => ({ address: `Small Hub D, Trichy, Street ${i+1}`, pincode: `6200${40 + i}` })) },
+                                { city: "Salem", mainHub: { address: "202 Four Roads, Salem", pincode: "636007" }, smallHubs: Array.from({ length: 10 }, (_, i) => ({ address: `Small Hub E, Salem, Street ${i+1}`, pincode: `6360${50 + i}` })) },
+                                { city: "Tirunelveli", mainHub: { address: "303 Palayamkottai, Tirunelveli", pincode: "627002" }, smallHubs: Array.from({ length: 10 }, (_, i) => ({ address: `Small Hub F, Tirunelveli, Street ${i+1}`, pincode: `6270${60 + i}` })) },
+                                { city: "Vellore", mainHub: { address: "404 Katpadi, Vellore", pincode: "632007" }, smallHubs: Array.from({ length: 10 }, (_, i) => ({ address: `Small Hub G, Vellore, Street ${i+1}`, pincode: `6320${70 + i}` })) },
+                                { city: "Erode", mainHub: { address: "505 Perundurai Road, Erode", pincode: "638011" }, smallHubs: Array.from({ length: 10 }, (_, i) => ({ address: `Small Hub H, Erode, Street ${i+1}`, pincode: `6380${80 + i}` })) },
+                                { city: "Thanjavur", mainHub: { address: "606 Old Bus Stand, Thanjavur", pincode: "613009" }, smallHubs: Array.from({ length: 10 }, (_, i) => ({ address: `Small Hub I, Thanjavur, Street ${i+1}`, pincode: `6130${90 + i}` })) },
+                                { city: "Kanchipuram", mainHub: { address: "707 Gandhi Road, Kanchipuram", pincode: "631502" }, smallHubs: Array.from({ length: 10 }, (_, i) => ({ address: `Small Hub J, Kanchipuram, Street ${i+1}`, pincode: `6315${10 + i}` })) },
+                                { city: "Thoothukudi", mainHub: { address: "808 VVD Signal, Thoothukudi", pincode: "628001" }, smallHubs: Array.from({ length: 10 }, (_, i) => ({ address: `Small Hub K, Thoothukudi, Street ${i+1}`, pincode: `6280${11 + i}` })) },
+                                { city: "Tiruppur", mainHub: { address: "909 Kumaran Road, Tiruppur", pincode: "641604" }, smallHubs: Array.from({ length: 10 }, (_, i) => ({ address: `Small Hub L, Tiruppur, Street ${i+1}`, pincode: `6416${12 + i}` })) },
+                                { city: "Nagercoil", mainHub: { address: "1011 Court Road, Nagercoil", pincode: "629001" }, smallHubs: Array.from({ length: 10 }, (_, i) => ({ address: `Small Hub M, Nagercoil, Street ${i+1}`, pincode: `6290${13 + i}` })) },
+                                { city: "Hosur", mainHub: { address: "1112 SIPCOT, Hosur", pincode: "635126" }, smallHubs: Array.from({ length: 10 }, (_, i) => ({ address: `Small Hub N, Hosur, Street ${i+1}`, pincode: `6351${14 + i}` })) },
+                                { city: "Dindigul", mainHub: { address: "1213 Nagal Nagar, Dindigul", pincode: "624003" }, smallHubs: Array.from({ length: 10 }, (_, i) => ({ address: `Small Hub O, Dindigul, Street ${i+1}`, pincode: `6240${15 + i}` })) },
+                                { city: "Cuddalore", mainHub: { address: "1314 Manjakuppam, Cuddalore", pincode: "607001" }, smallHubs: Array.from({ length: 10 }, (_, i) => ({ address: `Small Hub P, Cuddalore, Street ${i+1}`, pincode: `6070${16 + i}` })) },
+                                { city: "Puducherry", mainHub: { address: "1415 MG Road, Puducherry", pincode: "605001" }, smallHubs: Array.from({ length: 10 }, (_, i) => ({ address: `Small Hub Q, Puducherry, Street ${i+1}`, pincode: `6050${17 + i}` })) },
+                                { city: "Karur", mainHub: { address: "1516 Kovai Road, Karur", pincode: "639001" }, smallHubs: Array.from({ length: 10 }, (_, i) => ({ address: `Small Hub R, Karur, Street ${i+1}`, pincode: `6390${18 + i}` })) },
+                                { city: "Tiruvannamalai", mainHub: { address: "1617 Sathanur, Tiruvannamalai", pincode: "606601" }, smallHubs: Array.from({ length: 10 }, (_, i) => ({ address: `Small Hub S, Tiruvannamalai, Street ${i+1}`, pincode: `6066${19 + i}` })) },
+                                { city: "Nagercoil", mainHub: { address: "1718 Vadasery, Nagercoil", pincode: "629001" }, smallHubs: Array.from({ length: 10 }, (_, i) => ({ address: `Small Hub T, Nagercoil, Street ${i+1}`, pincode: `6290${20 + i}` })) },
+                                { city: "Pattukkottai", mainHub: { address: "1819 Palani Nagar, Pattukkottai", pincode: "614601" }, smallHubs: Array.from({ length: 10 }, (_, i) => ({ address: `Small Hub U, Pattukkottai, Street ${i+1}`, pincode: `6146${21 + i}` })) },
+                                { city: "Villupuram", mainHub: { address: "1920 K.K. Road, Villupuram", pincode: "605602" }, smallHubs: Array.from({ length: 10 }, (_, i) => ({ address: `Small Hub V, Villupuram, Street ${i+1}`, pincode: `6056${22 + i}` })) },
+                                { city: "Theni", mainHub: { address: "2021 Palanichettipatti, Theni", pincode: "625531" }, smallHubs: Array.from({ length: 10 }, (_, i) => ({ address: `Small Hub W, Theni, Street ${i+1}`, pincode: `6255${23 + i}` })) },
+                                { city: "Ooty", mainHub: { address: "2122 Main Road, Ooty", pincode: "643001" }, smallHubs: Array.from({ length: 10 }, (_, i) => ({ address: `Small Hub X, Ooty, Street ${i+1}`, pincode: `6430${24 + i}` })) },
+                                { city: "Ramanathapuram", mainHub: { address: "2223 R.Pattinam, Ramanathapuram", pincode: "623501" }, smallHubs: Array.from({ length: 10 }, (_, i) => ({ address: `Small Hub Y, Ramanathapuram, Street ${i+1}`, pincode: `6235${25 + i}` })) },
+                            ]
+                        }
+                    ]
+                },
+                {
+                    country: "USA",
+                    states: [
+                        { state: "California", cities: [{ city: "Los Angeles", mainHub: {}, smallHubs: [] }] },
+                        { state: "New York", cities: [{ city: "New York City", mainHub: {}, smallHubs: [] }] }
+                    ]
+                },
+                {
+                    country: "Canada",
+                    states: [
+                        { state: "Ontario", cities: [{ city: "Toronto", mainHub: {}, smallHubs: [] }] },
+                        { state: "Quebec", cities: [{ city: "Montreal", mainHub: {}, smallHubs: [] }] }
+                    ]
+                },
+                {
+                    country: "Australia",
+                    states: [
+                        { state: "New South Wales", cities: [{ city: "Sydney", mainHub: {}, smallHubs: [] }] },
+                        { state: "Victoria", cities: [{ city: "Melbourne", mainHub: {}, smallHubs: [] }] }
+                    ]
+                },
+                 {
+                    country: "Germany",
+                    states: [
+                        { state: "Bavaria", cities: [{ city: "Munich", mainHub: {}, smallHubs: [] }] },
+                        { state: "Berlin", cities: [{ city: "Berlin", mainHub: {}, smallHubs: [] }] }
+                    ]
+                },
+            ];
+
+            // /components/pages.js
+            const pages = {
+                vision: `
+                    <section class="text-white py-24 text-center mx-4 my-8 rounded-3xl bg-card shadow-lg">
+                        <div class="container mx-auto px-6 max-w-4xl">
+                            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold mb-4 leading-tight">The Future of Shared Mobility & Logistics</h1>
+                            <p class="text-lg sm:text-xl lg:text-2xl mb-8 opacity-90">
+                                Revolutionizing urban and inter-city movement by creating a dynamic, peer-to-peer network that seamlessly connects people with rides and packages with reliable transport, leveraging the power of everyday journeys.
+                            </p>
+                            <h2 class="text-3xl font-bold mb-6 text-white">Our Mission</h2>
+                            <p class="text-xl text-gray-400 mb-8 leading-relaxed">
+                                To provide a cost-effective, efficient, and community-driven solution for transportation and logistics, empowering individuals to earn passively while offering unparalleled convenience and affordability.
+                            </p>
+                        </div>
+                    </section>
+                `,
+                tripsync: `
+                    <section class="container mx-auto px-6 space-y-12 py-8">
+                        <div class="flex flex-col md:flex-row items-center justify-center space-y-8 md:space-y-0 md:space-x-16 bg-card p-8 rounded-3xl shadow-lg">
+                            <div class="md:w-1/2">
+                                <h2 class="text-4xl font-bold mb-4 text-white">Trip<span class="text-accent">Sync</span>: Shared Human Mobility</h2>
+                                <p class="text-gray-400 text-lg mb-6 leading-relaxed">
+                                    TripSync is our peer-to-peer ride-sharing service, empowering drivers to monetize their existing commutes and errands, while offering riders a significantly more affordable and community-focused alternative to traditional ride-hailing services.
+                                </p>
+                            </div>
+                            <div class="md:w-1/2">
+                                <img src="https://placehold.co/600x400/1f2937/d1d5db?text=TripSync+Map" alt="TripSync Map" class="rounded-3xl shadow-xl transform hover:scale-105 transition-transform duration-300">
+                            </div>
+                        </div>
+                        <div class="bg-card p-8 rounded-3xl shadow-lg">
+                            <h3 class="text-2xl font-bold mb-4 text-white text-center">How It Works</h3>
+                            <div class="grid md:grid-cols-3 gap-8 mt-6">
+                                <div class="flex flex-col items-center text-center p-4 bg-gray-700/50 rounded-2xl">
+                                    <div class="text-4xl text-accent mb-4"><i class="fas fa-route"></i></div>
+                                    <h4 class="text-xl font-semibold mb-2 text-white">1. Driver Posts a Route</h4>
+                                    <p class="text-gray-400">Drivers share their planned route and a flexible radius. They're already going there, why not earn a little extra?</p>
+                                </div>
+                                <div class="flex flex-col items-center text-center p-4 bg-gray-700/50 rounded-2xl">
+                                    <div class="text-4xl text-accent mb-4"><i class="fas fa-search"></i></div>
+                                    <h4 class="text-xl font-semibold mb-2 text-white">2. Rider Finds a Match</h4>
+                                    <p class="text-gray-400">Riders request a ride. Our Smart Match algorithm finds a driver whose route and schedule align with their needs.</p>
+                                </div>
+                                <div class="flex flex-col items-center text-center p-4 bg-gray-700/50 rounded-2xl">
+                                    <div class="text-4xl text-accent mb-4"><i class="fas fa-car-side"></i></div>
+                                    <h4 class="text-xl font-semibold mb-2 text-white">3. Ride Shared</h4>
+                                    <p class="text-gray-400">The driver makes a minimal detour to pick up and drop off the rider, making their trip more profitable and sustainable.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-card p-8 rounded-3xl shadow-lg">
+                            <h3 class="text-2xl font-bold mb-4 text-white">Key Features & Design Elements</h3>
+                            <div class="grid md:grid-cols-2 gap-8 text-gray-400">
+                                <div><h4 class="text-xl font-semibold text-accent mb-2">Dynamic Route & Smart Match Algorithm</h4><ul class="list-disc list-inside space-y-2"><li><strong class="font-semibold">Driver Control:</strong> Drivers post their planned route and a "willingness radius" to find matches.</li><li><strong class="font-semibold">Intelligent Matching:</strong> Our algorithm identifies drivers whose flexible paths intersect with the rider's desired route, calculating a minimal detour.</li><li><strong class="font-semibold">Visual Representation:</strong> Interactive maps show the original route and the proposed adjusted route.</li></ul></div>
+                                <div><h4 class="text-xl font-semibold text-accent mb-2">Flexible Pickup/Drop-off</h4><ul class="list-disc list-inside space-y-2"><li><strong class="font-semibold">Short-Distance (Intra-City):</strong> Direct door-to-door or near-door service.</li><li><strong class="font-semibold">Long-Distance (Inter-City/State):</strong> Pickups and drop-offs at designated, secure "TripSync Hubs" in major areas.</li></ul></div>
+                                <div><h4 class="text-xl font-semibold text-accent mb-2">Fair and Transparent Pricing Model</h4><ul class="list-disc list-inside space-y-2"><li><strong class="font-semibold">Dynamic Margin System:</strong> Pricing is based on a transparent margin system, with costs calculated from distance, time, riders, and vehicle class.</li><li><strong class="font-semibold">Affordability:</strong> Always positioned as significantly more affordable than traditional ride-hailing.</li></ul></div>
+                                <div><h4 class="text-xl font-semibold text-accent mb-2">Reciprocal Ride System & Trusted Circles</h4><ul class="list-disc list-inside space-y-2"><li><strong class="font-semibold">Incentive Program:</strong> Drivers earn "Ride Credits" for every trip.</li><li><strong class="font-semibold">Credit Redemption:</strong> Credits can be used to subsidize or fully pay for their own rides.</li><li><strong class="font-semibold">Trusted Circles:</strong> Create or join verified groups to prioritize matches within your social or professional network.</li><li><strong class="font-semibold">Community Badges:</strong> Earn badges to build credibility and trust within the network.</li></ul></div>
+                            </div>
+                        </div>
+                        <div class="bg-white rounded-xl shadow-xl p-6 sm:p-8 w-full max-w-2xl mx-auto text-gray-800">
+                            <h1 class="text-3xl sm:text-4xl font-bold text-center text-gray-800 mb-2">TripSync Pricing</h1>
+                            <p class="text-center text-gray-500 mb-8">Calculate the estimated cost for your TripSync ride.</p>
+                            
+                            <div class="space-y-6">
+                                <div>
+                                    <label for="distance_tripsync" class="block text-sm font-medium text-gray-700 mb-1">Distance (km)</label>
+                                    <input type="number" id="distance_tripsync" placeholder="e.g., 10" class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200">
+                                </div>
+                                <div>
+                                    <label for="traffic_tripsync" class="block text-sm font-medium text-gray-700 mb-1">Traffic Level</label>
+                                    <select id="traffic_tripsync" class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200">
+                                        <option value="low">Low</option>
+                                        <option value="medium">Medium</option>
+                                        <option value="high">High</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="seats_tripsync" class="block text-sm font-medium text-gray-700 mb-1">Seats Required</label>
+                                    <input type="number" id="seats_tripsync" placeholder="e.g., 1" class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200">
+                                </div>
+                                <div>
+                                    <label for="car_type_tripsync" class="block text-sm font-medium text-gray-700 mb-1">Car Type</label>
+                                    <select id="car_type_tripsync" class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200">
+                                        <option value="sedan">Sedan</option>
+                                        <option value="suv">SUV</option>
+                                        <option value="luxury">Luxury</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="day_time_tripsync" class="block text-sm font-medium text-gray-700 mb-1">Time of Day</label>
+                                    <select id="day_time_tripsync" class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200">
+                                        <option value="morning">Morning (6 AM - 12 PM)</option>
+                                        <option value="evening">Evening (4 PM - 10 PM)</option>
+                                        <option value="night">Night (10 PM - 6 AM)</option>
+                                    </select>
+                                </div>
+                                <button id="calculateBtn_tripsync" class="w-full bg-blue-600 text-white font-semibold py-3 rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-transform transform active:scale-95 duration-200">
+                                    Calculate Price
+                                </button>
+                            </div>
+                            
+                            <!-- Pricing Results Display -->
+                            <div id="results_tripsync" class="mt-8 hidden">
+                                <h2 class="text-2xl font-semibold text-gray-800 mb-4 text-center">Pricing Details</h2>
+                                <div class="space-y-4">
+                                    <div class="bg-gray-100 p-4 rounded-lg flex justify-between items-center">
+                                        <span class="text-sm sm:text-base font-medium text-gray-700">Client Price:</span>
+                                        <span id="clientPrice_tripsync" class="text-lg sm:text-xl font-bold text-blue-600">₹0.00</span>
+                                    </div>
+                                    <div class="bg-gray-100 p-4 rounded-lg flex justify-between items-center">
+                                        <span class="text-sm sm:text-base font-medium text-gray-700">Driver Payout:</span>
+                                        <span id="driverPayout_tripsync" class="text-lg sm:text-xl font-bold text-blue-600">₹0.00</span>
+                                    </div>
+                                    <div class="bg-gray-100 p-4 rounded-lg flex justify-between items-center">
+                                        <span class="text-sm sm:text-base font-medium text-gray-700">Your Company's Profit:</span>
+                                        <span id="companyProfit_tripsync" class="text-lg sm:text-xl font-bold text-purple-600">₹0.00</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-card rounded-xl shadow-xl p-6 sm:p-8 w-full max-w-2xl mx-auto text-gray-200 mt-12">
+                                <h2 class="text-2xl font-bold text-center text-white mb-6">TripSync Plan & Details</h2>
+                                <div id="tripsync-plan-details" class="space-y-6">
+                                    <div id="planned-details" class="bg-gray-700/50 p-6 rounded-lg">
+                                        <h3 class="text-xl font-semibold text-blue-400 mb-2">Planned Ride</h3>
+                                        <p class="text-gray-400"><strong>Fare Range:</strong> ₹10 - ₹15 per km (plus base fare)</p>
+                                        <ul class="list-disc list-inside space-y-2 mt-2 text-sm text-gray-400">
+                                            <li><strong>Description:</strong> Book your ride in advance. Most affordable and eco-friendly option.</li>
+                                            <li><strong>Cancellation Fee:</strong> ₹50 (if cancelled within 15 minutes of scheduled pickup)</li>
+                                            <li><strong>Note:</strong> Not suitable for urgent or on-demand trips.</li>
+                                        </ul>
+                                    </div>
+                                    <div id="basic-details" class="bg-gray-700/50 p-6 rounded-lg hidden">
+                                        <h3 class="text-xl font-semibold text-blue-400 mb-2">On-Demand Basic</h3>
+                                        <p class="text-gray-400"><strong>Fare Range:</strong> ₹15 - ₹20 per km (plus base fare)</p>
+                                        <ul class="list-disc list-inside space-y-2 mt-2 text-sm text-gray-400">
+                                            <li><strong>Description:</strong> Request a ride for immediate pick-up. A driver from our network will accept if their route aligns.</li>
+                                            <li><strong>Cancellation Fee:</strong> ₹100</li>
+                                            <li><strong>Note:</strong> Waiting time may vary based on driver availability.</li>
+                                        </ul>
+                                    </div>
+                                    <div id="premium-details" class="bg-gray-700/50 p-6 rounded-lg hidden">
+                                        <h3 class="text-xl font-semibold text-blue-400 mb-2">On-Demand Premium</h3>
+                                        <p class="text-gray-400"><strong>Fare Range:</strong> ₹20 - ₹25 per km (plus base fare)</p>
+                                        <ul class="list-disc list-inside space-y-2 mt-2 text-sm text-gray-400">
+                                            <li><strong>Description:</strong> Priority matching and a guaranteed pickup. A driver from a dedicated pool will be assigned to your request.</li>
+                                            <li><strong>Cancellation Fee:</strong> ₹150</li>
+                                            <li><strong>Note:</strong> Highest fare for guaranteed, fast service.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                `,
+                fluxload: `
+                    <section class="container mx-auto px-6 space-y-12 py-8">
+                        <div class="flex flex-col md:flex-row-reverse items-center justify-center space-y-8 md:space-y-0 md:space-x-16 bg-card p-8 rounded-3xl shadow-lg">
+                            <div class="md:w-1/2">
+                                <h2 class="text-4xl font-bold mb-4 text-white">Flux<span class="text-accent">Load</span>: Shared Logistics</h2>
+                                <p class="text-gray-400 text-lg mb-6 leading-relaxed">
+                                    FluxLoad transforms our network of everyday drivers into a distributed, flexible logistics solution, enabling cost-effective, hub-based transportation of packages, leveraging the unused capacity of vehicles already on the road.
+                                </p>
+                            </div>
+                            <div class="md:w-1/2">
+                                <img src="https://placehold.co/600x400/1f2937/d1d5db?text=FluxLoad+Hub" alt="FluxLoad Hub" class="rounded-3xl shadow-xl transform hover:scale-105 transition-transform duration-300">
+                            </div>
+                        </div>
+                        <div class="bg-card p-8 rounded-3xl shadow-lg">
+                            <h3 class="text-2xl font-bold mb-4 text-white text-center">The Journey of a Package</h3>
+                            <div class="flex flex-col md:flex-row items-center justify-between mt-6 space-y-6 md:space-y-0">
+                                <div class="flex flex-col items-center text-center max-w-sm">
+                                    <div class="text-4xl text-accent mb-4"><i class="fas fa-box-open"></i></div>
+                                    <h4 class="text-xl font-semibold mb-2 text-white">1. Drop-off</h4>
+                                    <p class="text-gray-400">The sender drops off the package at a secure FluxLoad Hub near them. The package is verified and receives a unique tracking QR code.</p>
+                                </div>
+                                <div class="flex-grow flex items-center justify-center my-4 md:my-0">
+                                    <i class="fas fa-arrow-right text-4xl text-white"></i>
+                                </div>
+                                <div class="flex flex-col items-center text-center max-w-sm">
+                                    <div class="text-4xl text-accent mb-4"><i class="fas fa-truck-moving"></i></div>
+                                    <h4 class="text-xl font-semibold mb-2 text-white">2. Driver Transport</h4>
+                                    <p class="text-gray-400">A driver already heading in the right direction picks up the package and transports it to the next hub along their route.</p>
+                                </div>
+                                <div class="flex-grow flex items-center justify-center my-4 md:my-0">
+                                    <i class="fas fa-arrow-right text-4xl text-white"></i>
+                                </div>
+                                <div class="flex flex-col items-center text-center max-w-sm">
+                                    <div class="text-4xl text-accent mb-4"><i class="fas fa-map-marked-alt"></i></div>
+                                    <h4 class="text-xl font-semibold mb-2 text-white">3. Hub-to-Hub Network</h4>
+                                    <p class="text-gray-400">The package may be transferred between multiple hubs and drivers, each step carefully tracked, until it reaches the destination hub.</p>
+                                </div>
+                                <div class="flex-grow flex items-center justify-center my-4 md:my-0">
+                                    <i class="fas fa-arrow-right text-4xl text-white"></i>
+                                </div>
+                                <div class="flex flex-col items-center text-center max-w-sm">
+                                    <div class="text-4xl text-accent mb-4"><i class="fas fa-home"></i></div>
+                                    <h4 class="text-xl font-semibold mb-2 text-white">4. Pickup</h4>
+                                    <p class="text-gray-400">The recipient is notified and picks up their package from the final hub at their convenience, completing the journey.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-card p-8 rounded-3xl shadow-lg">
+                            <h3 class="text-2xl font-bold mb-4 text-white">Key Features & Design Elements</h3>
+                            <div class="grid md:grid-cols-2 gap-8 text-gray-400">
+                                <div><h4 class="text-xl font-semibold text-accent mb-2">Hub-Centric Logistics Model</h4><ul class="list-disc list-inside space-y-2"><li><strong class="font-semibold">Extensive Hub Network:</strong> A wide network of "FluxLoad Hubs" serves as drop-off and pickup points.</li><li><strong class="font-semibold">Driver-Led Picking:</strong> Drivers can browse available packages based on their planned route.</li><li><strong class="font-semibold">Visual Hub Map:</strong> An interactive map shows all available FluxLoad Hubs and their details.</li></ul></div>
+                                <div><h4 class="text-xl font-semibold text-accent mb-2">Diverse Parcel Types & Restrictions</h4><ul class="list-disc list-inside space-y-2"><li><strong class="font-semibold">Non-Perishable Focus:</strong> Strictly limited to non-perishable, non-hazardous, and non-time-sensitive items.</li><li><strong class="font-semibold">Size & Weight Limits:</strong> Clear guidelines ensure packages fit in standard passenger vehicles.</li></ul></div>
+                                <div><h4 class="text-xl font-semibold text-accent mb-2">Enhanced Security & Tracking (at Hubs)</h4><ul class="list-disc list-inside space-y-2"><li><strong class="font-semibold">Identity Verification:</strong> Both senders and receivers must verify their identity at the hub.</li><li><strong class="font-semibold">QR Code Tracking:</strong> Each package receives a unique QR code for real-time, end-to-end tracking.</li></ul></div>
+                                <div><h4 class="text-xl font-semibold text-accent mb-2">Driver Earning & Motivation</h4><ul class="list-disc list-inside space-y-2"><li><strong class="font-semibold">Passive Income:</strong> Drivers earn a commission for each package transported.</li><li><strong class="font-semibold">"Load Alerts":</strong> Drivers can receive alerts for packages that match their planned routes.</li></ul></div>
+                            </div>
+                        </div>
+                        <div class="bg-white rounded-xl shadow-xl p-6 sm:p-8 w-full max-w-2xl mx-auto text-gray-800">
+                            <h1 class="text-3xl sm:text-4xl font-bold text-center text-gray-800 mb-2">FluxLoad Pricing</h1>
+                            <p class="text-center text-gray-500 mb-8">Calculate costs for clients, payouts for drivers, and your company's profit.</p>
+                            
+                            <!-- Input Form for Pricing Filters -->
+                            <div class="space-y-6">
+                                <div>
+                                    <label for="distance_fluxload" class="block text-sm font-medium text-gray-700 mb-1">Distance (km)</label>
+                                    <input type="number" id="distance_fluxload" placeholder="e.g., 50" class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-emerald-500 focus:border-emerald-500 transition-colors duration-200">
+                                </div>
+                                <div>
+                                    <label for="weight_fluxload" class="block text-sm font-medium text-gray-700 mb-1">Cargo Weight (kg)</label>
+                                    <input type="number" id="weight_fluxload" placeholder="e.g., 10" class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-emerald-500 focus:border-emerald-500 transition-colors duration-200">
+                                </div>
+                                <div>
+                                    <label for="delivery_time_fluxload" class="block text-sm font-medium text-gray-700 mb-1">Time to Delivery (days)</label>
+                                    <input type="number" id="delivery_time_fluxload" placeholder="e.g., 3" class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-emerald-500 focus:border-emerald-500 transition-colors duration-200">
+                                </div>
+
+                                <button id="calculateBtn_fluxload" class="w-full bg-emerald-600 text-white font-semibold py-3 rounded-lg shadow-lg hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 transition-transform transform active:scale-95 duration-200">
+                                    Calculate Price
+                                </button>
+                            </div>
+
+                            <!-- Pricing Results Display -->
+                            <div id="results_fluxload" class="mt-8 hidden">
+                                <h2 class="text-2xl font-semibold text-gray-800 mb-4 text-center">Pricing Details</h2>
+                                <div class="space-y-4">
+                                    <div class="bg-gray-100 p-4 rounded-lg flex justify-between items-center">
+                                        <span class="text-sm sm:text-base font-medium text-gray-700">Client Price:</span>
+                                        <span id="clientPrice_fluxload" class="text-lg sm:text-xl font-bold text-emerald-600">₹0.00</span>
+                                    </div>
+                                    <div class="bg-gray-100 p-4 rounded-lg flex justify-between items-center">
+                                        <span class="text-sm sm:text-base font-medium text-gray-700">Driver Payout:</span>
+                                        <span id="driverPayout_fluxload" class="text-lg sm:text-xl font-bold text-blue-600">₹0.00</span>
+                                    </div>
+                                    <div class="bg-gray-100 p-4 rounded-lg flex justify-between items-center">
+                                        <span class="text-sm sm:text-base font-medium text-gray-700">Your Company's Profit:</span>
+                                        <span id="companyProfit_fluxload" class="text-lg sm:text-xl font-bold text-purple-600">₹0.00</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-card rounded-xl shadow-xl p-6 sm:p-8 w-full max-w-2xl mx-auto text-gray-200 mt-12">
+                                <h2 class="text-2xl font-bold text-center text-white mb-6">FluxLoad Plan & Details</h2>
+                                <div id="fluxload-plan-details" class="space-y-6">
+                                    <div id="economy-details" class="bg-gray-700/50 p-6 rounded-lg">
+                                        <h3 class="text-xl font-semibold text-blue-400 mb-2">Economy</h3>
+                                        <p class="text-gray-400"><strong>Price Range:</strong> ₹10 - ₹20 per kg</p>
+                                        <ul class="list-disc list-inside space-y-2 mt-2 text-sm text-gray-400">
+                                            <li><strong>Delivery Time:</strong> 5-7 business days</li>
+                                            <li><strong>Description:</strong> Standard, non-urgent delivery. Most cost-effective.</li>
+                                        </ul>
+                                    </div>
+                                    <div id="standard-details" class="bg-gray-700/50 p-6 rounded-lg hidden">
+                                        <h3 class="text-xl font-semibold text-blue-400 mb-2">Standard</h3>
+                                        <p class="text-gray-400"><strong>Price Range:</strong> ₹20 - ₹30 per kg</p>
+                                        <ul class="list-disc list-inside space-y-2 mt-2 text-sm text-gray-400">
+                                            <li><strong>Delivery Time:</strong> 3-5 business days</li>
+                                            <li><strong>Description:</strong> Moderate speed with a balanced price.</li>
+                                        </ul>
+                                    </div>
+                                    <div id="priority-details" class="bg-gray-700/50 p-6 rounded-lg hidden">
+                                        <h3 class="text-xl font-semibold text-blue-400 mb-2">Priority</h3>
+                                        <p class="text-gray-400"><strong>Price Range:</strong> ₹30 - ₹50 per kg</p>
+                                        <ul class="list-disc list-inside space-y-2 mt-2 text-sm text-gray-400">
+                                            <li><strong>Delivery Time:</strong> 1-3 business days</li>
+                                            <li><strong>Description:</strong> For more time-sensitive packages. Highest price for fastest service.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                `,
+                hubs: `
+                    <section class="container mx-auto px-6 space-y-12 py-8">
+                        <div class="bg-card p-6 rounded-3xl shadow-lg">
+                            <h2 class="text-4xl font-bold text-center mb-4 text-white">Our Hub Network</h2>
+                            <p class="text-center text-gray-400 mb-8">Locate our main and small hubs across our operational regions.</p>
+                            <div class="flex flex-col md:flex-row md:space-x-4 space-y-4 md:space-y-0 mb-6">
+                                <div class="flex-1">
+                                    <label for="country-select" class="block text-sm font-medium text-gray-300 mb-1">Select Country</label>
+                                    <select id="country-select" class="w-full p-2 rounded-lg bg-gray-700/50 border border-gray-600 text-white focus:outline-none focus:ring-2 focus:ring-accent"></select>
+                                </div>
+                                <div class="flex-1">
+                                    <label for="state-select" class="block text-sm font-medium text-gray-300 mb-1">Select State</label>
+                                    <select id="state-select" class="w-full p-2 rounded-lg bg-gray-700/50 border border-gray-600 text-white focus:outline-none focus:ring-2 focus:ring-accent"></select>
+                                </div>
+                            </div>
+                            <div class="flex justify-center space-x-4 mb-6">
+                                <button id="main-hubs-tab" class="tab-button px-6 py-2 rounded-full text-sm font-medium bg-gray-700/50 text-gray-300 transition-colors active">Main Hubs</button>
+                                <button id="small-hubs-tab" class="tab-button px-6 py-2 rounded-full text-sm font-medium bg-gray-700/50 text-gray-300 transition-colors">Small Hubs</button>
+                            </div>
+                            <div id="main-hubs-section" class="tab-content">
+                                <div class="mb-4">
+                                    <input type="text" id="main-hubs-search" placeholder="Search by city, address or pincode" class="w-full p-2 rounded-lg bg-gray-700/50 border border-gray-600 text-white focus:outline-none focus:ring-2 focus:ring-accent">
+                                </div>
+                                <div class="overflow-x-auto rounded-lg">
+                                    <table class="min-w-full divide-y divide-gray-700">
+                                        <thead>
+                                            <tr>
+                                                <th class="px-4 py-3">City</th>
+                                                <th class="px-4 py-3">Address</th>
+                                                <th class="px-4 py-3">Pincode</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="main-hubs-table-body" class="bg-gray-800/50 divide-y divide-gray-700"></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div id="small-hubs-section" class="tab-content hidden">
+                                <div class="mb-4">
+                                    <input type="text" id="small-hubs-search" placeholder="Search by city, address or pincode" class="w-full p-2 rounded-lg bg-gray-700/50 border border-gray-600 text-white focus:outline-none focus:ring-2 focus:ring-accent">
+                                </div>
+                                <div class="overflow-x-auto rounded-lg">
+                                    <table class="min-w-full divide-y divide-gray-700">
+                                        <thead>
+                                            <tr>
+                                                <th class="px-4 py-3">City</th>
+                                                <th class="px-4 py-3">Address</th>
+                                                <th class="px-4 py-3">Pincode</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="small-hubs-table-body" class="bg-gray-800/50 divide-y divide-gray-700"></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                `,
+                comparison: `
+                    <section class="container mx-auto px-6 space-y-12 py-8">
+                        <h2 class="text-4xl font-bold mb-4 text-center text-white">How We Compare: TripSync vs. Others</h2>
+                        <div class="bg-card p-6 rounded-lg shadow-lg overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-700">
+                                <thead>
+                                    <tr>
+                                        <th class="py-3">Feature</th>
+                                        <th class="py-3">GoDrive: TripSync</th>
+                                        <th class="py-3">Uber/Ola (Ride-Hailing)</th>
+                                        <th class="py-3">BlaBlaCar (Long-Distance)</th>
+                                        <th class="py-3">Waze Carpool (Commute-Focused)</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="text-gray-400">
+                                    <tr><td>Driver's Motivation</td><td>Passive Income/Expense Offset: Casual drivers monetizing existing trips.</td><td>Professional Income: Dedicated drivers, primary income source.</td><td>Cost Sharing: Offsetting personal trip costs, not profiting.</td><td>Cost Sharing: Strictly for offsetting commute costs.</td></tr>
+                                    <tr><td>Trip Type & Range</td><td>Hybrid (Local & Inter-State): One platform for all distances, leveraging flexible routes.</td><td>Primarily Local & On-Demand: Short-to-medium urban trips.</td><td>Planned & Long-Distance: Inter-city/state travel only.</td><td>Structured Commutes: Fixed daily work/home routes.</td></tr>
+                                    <tr><td>Booking & Matching</td><td>"Driver-First" Posting + "Smart Match": Drivers post flexible routes; algorithm finds optimal matches.</td><td>"Rider-First" Request: Immediate, on-demand driver dispatch.</td><td>"Driver-First" Posting: Drivers post planned trips; riders book seats.</td><td>"Driver-First" Posting: Drivers list commutes; riders request to join.</td></tr>
+                                    <tr><td>Pricing Model</td><td>Dynamic, Margin-Based: Transparent sharing, always more affordable than cabs.</td><td>Dynamic & High-Margin: Surge pricing, maximizing company/driver profit.</td><td>Fixed & Cost-Based: Minimal, cost-covering, low profit.</td><td>Very Low-Cost: Near-gas-only cost, minimal fees.</td></tr>
+                                    <tr><td>Community & Trust</td><td>"Trusted Circles" & Social Integration: Prioritized matches within verified networks, badges.</td><td>Rating System: Basic two-way rating.</td><td>Extensive Profiles & Reviews: Community vetting for long journeys.</td><td>Limited Trusted Circles: Within company/school only.</td></tr>
+                                    <tr><td>Key Differentiator</td><td>Flexibility (Dynamic Route): Driver's route can flex slightly, allowing optimal, low-impact detours. Unified Local/Long-Distance Hubs.</td><td>Immediate On-Demand: Instant ride availability.</td><td>Affordable Long-Distance: Budget travel for pre-planned journeys.</td><td>Strictly Commuting: Hyper-focused on daily work travel.</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <h2 class="text-4xl font-bold mt-16 mb-4 text-center text-white">How We Compare: FluxLoad vs. Others</h2>
+                        <div class="bg-card p-6 rounded-lg shadow-lg overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-700">
+                                <thead>
+                                    <tr>
+                                        <th class="py-3">Feature</th>
+                                        <th class="py-3">GoDrive: FluxLoad</th>
+                                        <th class="py-3">Traditional Courier Services</th>
+                                        <th class="py-3">Hyper-local Delivery</th>
+                                        <th class="py-3">E-commerce Logistics</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="text-gray-400">
+                                    <tr><td>Worker Type & Motivation</td><td>Casual, Non-Professional Drivers: Monetizing existing trips with unused vehicle space.</td><td>Professional Couriers: Dedicated, full-time delivery personnel.</td><td>Gig Workers (Dedicated): On-demand, dedicated delivery personnel.</td><td>Dedicated Logistics Network: Full-time, specialized delivery force.</td></tr>
+                                    <tr><td>Delivery Model</td><td>Hub-to-Hub Network: Packages dropped/picked up at secure hubs, following driver's existing route.</td><td>Door-to-Door: Direct pickup from sender, direct delivery to recipient.</td><td>Point-to-Point (Door-to-Door): Usually within short radius, direct.</td><td>Warehouse-to-Door/Hub-to-Door: Highly optimized, large-scale direct delivery.</td></tr>
+                                    <tr><td>Cost & Pricing</td><td>Significantly Lower: Affordable, flexible, shared-load pricing. Ideal for non-urgent.</td><td>Fixed & Higher: Premium for speed, reliability, and guaranteed service.</td><td>Medium-High: Priced for speed and on-demand convenience within a city.</td><td>Integrated into Product Cost: Optimized for volume, generally low cost for consumer.</td></tr>
+                                    <tr><td>Speed & Guarantee</td><td>Flexible, No Guaranteed Time: Delivery time dependent on driver's schedule and hub transfers.</td><td>Guaranteed & Timed: Offers specific, firm delivery windows (e.g., next-day, same-day).</td><td>Fast & On-Demand: Delivered within minutes/hours.</td><td>Fast & Scheduled: Often same-day/next-day, with tracking.</td></tr>
+                                    <tr><td>Package Type</td><td>Non-Perishable, Non-Urgent: Documents, clothing, small electronics, non-fragile items.</td><td>Any Type: Valuables, perishables, fragile, documents, etc.</td><td>Varied (Small): Food, groceries, small items, some documents.</td><td>Volume-Based E-commerce Fulfillment: Highly efficient, large-scale distribution.</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+                `,
+                contact: `
+                    <footer class="bg-card text-gray-400 py-12 rounded-3xl mx-4 my-8 shadow-lg">
+                        <div class="container mx-auto px-6 text-center">
+                            <h3 class="text-3xl font-bold mb-4 text-white">Join the Movement</h3>
+                            <p class="text-gray-400 mb-8 max-w-2xl mx-auto">
+                                Be a part of the future of shared mobility and logistics. Sign up for updates and be the first to know when we launch.
+                            </p>
+                            <form class="max-w-md mx-auto">
+                                <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+                                    <input type="email" placeholder="Enter your email" class="w-full p-4 rounded-full text-gray-800 bg-gray-200 focus:outline-none focus:ring-4 focus:ring-blue-500 transition-shadow">
+                                    <button type="submit" class="bg-blue-600 text-white p-4 rounded-full font-bold hover:bg-blue-700 transition-colors">Subscribe</button>
+                                </div>
+                            </form>
+                            <div class="mt-10 text-sm text-gray-500">
+                                &copy; 2025 GoDrive. All rights reserved.
+                            </div>
+                        </div>
+                    </footer>
+                `,
+                // ...existing code...
+credits: `
+    <section id="credits" class="py-20">
+      <div class="max-w-5xl mx-auto px-6">
+        <h2 class="text-3xl font-bold text-accent mb-6">Credits</h2>
+        <p class="text-lg mb-4">This project was made possible thanks to the combined efforts of our research team, open-source contributions, and reference studies.</p>
+        <ul class="list-disc list-inside space-y-2">
+          <li>UI/UX inspiration from modern mobility platforms</li>
+          <li>Data analysis from transport & logistics studies</li>
+          <li>Special thanks to contributors who shared survey insights</li>
+        </ul>
+        <div class="mt-8">
+          <h3 class="text-xl font-semibold text-accent mb-2">Team Members</h3>
+          <ul class="list-disc list-inside space-y-1">
+            <li>Joel Heinz</li>
+            <li>Jacob Sam</li>
+            <li>Haricharan</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="research" class="py-20 bg-card rounded-2xl">
+      <div class="max-w-5xl mx-auto px-6">
+        <h2 class="text-3xl font-bold text-accent mb-6">Research Papers & Surveys</h2>
+        <p class="text-lg mb-6">Below are selected studies and surveys about courier services, cab services, lift sharing, and carpooling that informed GoDrive:</p>
+        <ul class="space-y-4">
+          <li>
+            <b>Courier Services:</b>  
+            <a href="https://doi.org/10.1016/j.tre.2019.06.004" target="_blank" class="text-blue-400 underline">
+              "Logistics & Courier Service Optimization in Urban Mobility"
+            </a>
+          </li>
+          <li>
+            <b>Cab Services:</b>  
+            <a href="https://doi.org/10.1016/j.jtrangeo.2018.11.006" target="_blank" class="text-blue-400 underline">
+              "Ride-hailing Impacts on Urban Transport"
+            </a>
+          </li>
+          <li>
+            <b>Lift Services:</b>  
+            <a href="https://doi.org/10.1016/j.tranpol.2020.07.015" target="_blank" class="text-blue-400 underline">
+              "Lift Sharing and Its Effect on Traffic Congestion"
+            </a>
+          </li>
+          <li>
+            <b>Carpooling:</b>  
+            <a href="https://doi.org/10.1016/j.cities.2021.103268" target="_blank" class="text-blue-400 underline">
+              "The Impact of Carpooling on Urban Mobility"
+            </a>
+          </li>
+        </ul>
+      </div>
+    </section>
+`,
+// ...existing code...
+
+            };
+
+            // --- Main JavaScript Logic ---
+            function showPage(pageName) {
+                mainContentArea.innerHTML = pages[pageName];
+                navLinks.forEach(link => {
+                    if (link.getAttribute('href').substring(1) === pageName) {
+                        link.classList.add('active');
+                    } else {
+                        link.classList.remove('active');
+                    }
+                });
+                
+                // Hubs page specific functionality
+                if (pageName === 'hubs') {
+                    const countrySelect = document.getElementById('country-select');
+                    const stateSelect = document.getElementById('state-select');
+                    const mainHubsTab = document.getElementById('main-hubs-tab');
+                    const smallHubsTab = document.getElementById('small-hubs-tab');
+                    const mainHubsSection = document.getElementById('main-hubs-section');
+                    const smallHubsSection = document.getElementById('small-hubs-section');
+                    const mainHubsSearch = document.getElementById('main-hubs-search');
+                    const smallHubsSearch = document.getElementById('small-hubs-search');
+
+                    let currentCountry = 'India';
+                    let currentState = 'Tamil Nadu';
+                    let currentHubType = 'main';
+
+                    // Function to populate country dropdown
+                    function populateCountries() {
+                        hubsData.forEach(country => {
+                            const option = document.createElement('option');
+                            option.value = country.country;
+                            option.textContent = country.country;
+                            countrySelect.appendChild(option);
+                        });
+                        countrySelect.value = currentCountry; // Set default
+                        populateStates();
+                    }
+
+                    // Function to populate state dropdown
+                    function populateStates() {
+                        stateSelect.innerHTML = '';
+                        const selectedCountryData = hubsData.find(c => c.country === countrySelect.value);
+                        if (selectedCountryData) {
+                            selectedCountryData.states.forEach(state => {
+                                const option = document.createElement('option');
+                                option.value = state.state;
+                                option.textContent = state.state;
+                                stateSelect.appendChild(option);
+                            });
+                        }
+                        stateSelect.value = currentState; // Set default
+                        renderHubs();
+                    }
+
+                    // Function to render hub data in the table
+                    function renderHubs() {
+                        const mainTableBody = document.getElementById('main-hubs-table-body');
+                        const smallTableBody = document.getElementById('small-hubs-table-body');
+                        mainTableBody.innerHTML = '';
+                        smallTableBody.innerHTML = '';
+
+                        const countryData = hubsData.find(c => c.country === currentCountry);
+                        if (!countryData) return;
+                        const stateData = countryData.states.find(s => s.state === currentState);
+                        if (!stateData) return;
+                        
+                        // Main Hubs
+                        if (stateData.cities.length > 0) {
+                            stateData.cities.forEach(cityData => {
+                                if (cityData.mainHub && Object.keys(cityData.mainHub).length > 0) {
+                                    const row = document.createElement('tr');
+                                    row.innerHTML = `
+                                        <td class="px-4 py-4">${cityData.city}</td>
+                                        <td class="px-4 py-4">${cityData.mainHub.address}</td>
+                                        <td class="px-4 py-4">${cityData.mainHub.pincode}</td>
+                                    `;
+                                    mainTableBody.appendChild(row);
+                                }
+                            });
+                        }
+
+                        // Small Hubs
+                        if (stateData.cities.length > 0) {
+                            stateData.cities.forEach(cityData => {
+                                if (cityData.smallHubs && cityData.smallHubs.length > 0) {
+                                    cityData.smallHubs.forEach(hub => {
+                                        const row = document.createElement('tr');
+                                        row.innerHTML = `
+                                            <td class="px-4 py-4">${cityData.city}</td>
+                                            <td class="px-4 py-4">${hub.address}</td>
+                                            <td class="px-4 py-4">${hub.pincode}</td>
+                                        `;
+                                        smallTableBody.appendChild(row);
+                                    });
+                                }
+                            });
+                        }
+                    }
+
+                    // Function to filter hubs based on search input
+                    function filterHubs(searchInput, tableBodyId) {
+                        const filter = searchInput.value.toUpperCase();
+                        const tableBody = document.getElementById(tableBodyId);
+                        const rows = tableBody.getElementsByTagName('tr');
+                        for (let i = 0; i < rows.length; i++) {
+                            let found = false;
+                            const cells = rows[i].getElementsByTagName('td');
+                            for (let j = 0; j < cells.length; j++) {
+                                const cellValue = cells[j].textContent || cells[j].innerText;
+                                if (cellValue.toUpperCase().indexOf(filter) > -1) {
+                                    found = true;
+                                    break;
+                                }
+                            }
+                            rows[i].style.display = found ? "" : "none";
+                        }
+                    }
+
+                    function showMainHubs() {
+                        mainHubsSection.classList.remove('hidden');
+                        smallHubsSection.classList.add('hidden');
+                        mainHubsTab.classList.add('active');
+                        smallHubsTab.classList.remove('active');
+                        currentHubType = 'main';
+                    }
+
+                    function showSmallHubs() {
+                        smallHubsSection.classList.remove('hidden');
+                        mainHubsSection.classList.add('hidden');
+                        smallHubsTab.classList.add('active');
+                        mainHubsTab.classList.remove('active');
+                        currentHubType = 'small';
+                    }
+
+                    // Event listeners
+                    countrySelect.addEventListener('change', () => {
+                        currentCountry = countrySelect.value;
+                        // Reset state to the first available for the new country
+                        const selectedCountryData = hubsData.find(c => c.country === currentCountry);
+                        if (selectedCountryData && selectedCountryData.states.length > 0) {
+                            currentState = selectedCountryData.states[0].state;
+                        }
+                        populateStates();
+                    });
+
+                    stateSelect.addEventListener('change', () => {
+                        currentState = stateSelect.value;
+                        renderHubs();
+                    });
+
+                    mainHubsTab.addEventListener('click', showMainHubs);
+                    smallHubsTab.addEventListener('click', showSmallHubs);
+                    
+                    mainHubsSearch.addEventListener('keyup', () => filterHubs(mainHubsSearch, 'main-hubs-table-body'));
+                    smallHubsSearch.addEventListener('keyup', () => filterHubs(smallHubsSearch, 'small-hubs-table-body'));
+
+                    // Initial load
+                    populateCountries();
+                    showMainHubs(); 
+                }
+
+                // Pricing page specific functionality
+                if (pageName === 'tripsync' || pageName === 'fluxload') {
+                    const messageBox = document.getElementById('messageBox');
+                    const messageText = document.getElementById('messageText');
+
+                    function showMessage(message) {
+                        messageText.textContent = message;
+                        messageBox.classList.remove('hidden');
+                    }
+
+                    function hideMessage() {
+                        messageBox.classList.add('hidden');
+                    }
+
+                    if (pageName === 'tripsync') {
+                        const distanceInput = document.getElementById('distance_tripsync');
+                        const trafficSelect = document.getElementById('traffic_tripsync');
+                        const seatsInput = document.getElementById('seats_tripsync');
+                        const carTypeSelect = document.getElementById('car_type_tripsync');
+                        const dayTimeSelect = document.getElementById('day_time_tripsync');
+                        const calculateBtn = document.getElementById('calculateBtn_tripsync');
+                        const resultsDiv = document.getElementById('results_tripsync');
+                        const clientPriceSpan = document.getElementById('clientPrice_tripsync');
+                        const driverPayoutSpan = document.getElementById('driverPayout_tripsync');
+                        const companyProfitSpan = document.getElementById('companyProfit_tripsync');
+                        const plannedDetailsDiv = document.getElementById('planned-details');
+                        const basicDetailsDiv = document.getElementById('basic-details');
+                        const premiumDetailsDiv = document.getElementById('premium-details');
+
+                        const TRIPSYNC_PRICING = {
+                            baseRate: 50,
+                            rates: {
+                                traffic: { low: 1, medium: 1.2, high: 1.5 },
+                                seats: { 1: 0, 2: 15, 3: 20, 4: 25 },
+                                car_type: { sedan: 1, suv: 1.2, luxury: 1.5 },
+                                day_time: { morning: 1.1, evening: 1.3, night: 1.5 }
+                            },
+                            margins: {
+                                planned: 0.2, // 20% company profit
+                                basic: 0.25, // 25% company profit
+                                premium: 0.3 // 30% company profit
+                            }
+                        };
+                        const perKmRate = 12; // Base per km rate
+
+                        function calculateTripsyncPricing() {
+                            hideMessage();
+                            resultsDiv.classList.add('hidden');
+
+                            const distance = parseFloat(distanceInput.value);
+                            const trafficLevel = trafficSelect.value;
+                            const seatsRequired = parseInt(seatsInput.value, 10);
+                            const carType = carTypeSelect.value;
+                            const dayTime = dayTimeSelect.value;
+                            
+                            const planType = 'basic'; // Assuming basic as default, as the other parameters determine the cost
+
+                            if (isNaN(distance) || distance <= 0 || isNaN(seatsRequired) || seatsRequired <= 0) {
+                                showMessage("Please enter valid positive numbers for distance and seats.");
+                                return;
+                            }
+
+                            const trafficFactor = TRIPSYNC_PRICING.rates.traffic[trafficLevel];
+                            const seatsCost = TRIPSYNC_PRICING.rates.seats[seatsRequired] || 0;
+                            const carFactor = TRIPSYNC_PRICING.rates.car_type[carType];
+                            const dayTimeFactor = TRIPSYNC_PRICING.rates.day_time[dayTime];
+
+                            const totalCost = (TRIPSYNC_PRICING.baseRate + (distance * perKmRate)) * trafficFactor * carFactor * dayTimeFactor + seatsCost;
+                            
+                            const companyMargin = TRIPSYNC_PRICING.margins[planType];
+                            const companyProfit = totalCost * companyMargin;
+                            const driverPayout = totalCost - companyProfit;
+
+                            clientPriceSpan.textContent = `₹${totalCost.toFixed(2)}`;
+                            driverPayoutSpan.textContent = `₹${driverPayout.toFixed(2)}`;
+                            companyProfitSpan.textContent = `₹${companyProfit.toFixed(2)}`;
+                            resultsDiv.classList.remove('hidden');
+                        }
+
+                        calculateBtn.addEventListener('click', calculateTripsyncPricing);
+                    } else if (pageName === 'fluxload') {
+                        const distanceInput = document.getElementById('distance_fluxload');
+                        const weightInput = document.getElementById('weight_fluxload');
+                        const deliveryTimeInput = document.getElementById('delivery_time_fluxload');
+                        const calculateBtn = document.getElementById('calculateBtn_fluxload');
+                        const resultsDiv = document.getElementById('results_fluxload');
+                        const clientPriceSpan = document.getElementById('clientPrice_fluxload');
+                        const driverPayoutSpan = document.getElementById('driverPayout_fluxload');
+                        const companyProfitSpan = document.getElementById('companyProfit_fluxload');
+                        const economyDetailsDiv = document.getElementById('economy-details');
+                        const standardDetailsDiv = document.getElementById('standard-details');
+                        const priorityDetailsDiv = document.getElementById('priority-details');
+
+                        const FLUXLOAD_PRICING = {
+                            baseRate: 100,
+                            perKmRate: 5,
+                            perKgRate: 15,
+                            deliveryTimeFactor: {
+                                1: 1.5, // 1-3 days
+                                3: 1.2, // 3-5 days
+                                5: 1 // 5-7 days
+                            },
+                            margins: {
+                                economy: 0.15,
+                                standard: 0.2,
+                                priority: 0.25
+                            }
+                        };
+
+                        function calculateFluxloadPricing() {
+                            hideMessage();
+                            resultsDiv.classList.add('hidden');
+
+                            const distance = parseFloat(distanceInput.value);
+                            const weight = parseFloat(weightInput.value);
+                            const deliveryTime = parseFloat(deliveryTimeInput.value);
+
+                            if (isNaN(distance) || distance <= 0 || isNaN(weight) || weight <= 0 || isNaN(deliveryTime) || deliveryTime <= 0) {
+                                showMessage("Please enter valid positive numbers for all fields.");
+                                return;
+                            }
+                            
+                            let timeFactor, planType;
+                            if (deliveryTime <= 3) {
+                                timeFactor = FLUXLOAD_PRICING.deliveryTimeFactor[1];
+                                planType = 'priority';
+                            } else if (deliveryTime <= 5) {
+                                timeFactor = FLUXLOAD_PRICING.deliveryTimeFactor[3];
+                                planType = 'standard';
+                            } else {
+                                timeFactor = FLUXLOAD_PRICING.deliveryTimeFactor[5];
+                                planType = 'economy';
+                            }
+
+                            const totalCost = (FLUXLOAD_PRICING.baseRate + (distance * FLUXLOAD_PRICING.perKmRate) + (weight * FLUXLOAD_PRICING.perKgRate)) * timeFactor;
+                            
+                            const companyMargin = FLUXLOAD_PRICING.margins[planType];
+                            const companyProfit = totalCost * companyMargin;
+                            const driverPayout = totalCost - companyProfit;
+
+                            clientPriceSpan.textContent = `₹${totalCost.toFixed(2)}`;
+                            driverPayoutSpan.textContent = `₹${driverPayout.toFixed(2)}`;
+                            companyProfitSpan.textContent = `₹${companyProfit.toFixed(2)}`;
+                            resultsDiv.classList.remove('hidden');
+                        }
+
+                        calculateBtn.addEventListener('click', calculateFluxloadPricing);
+                    }
+                }
+            }
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', (event) => {
+                    event.preventDefault();
+                    const pageName = link.getAttribute('href').substring(1);
+                    showPage(pageName);
+                });
+            });
+
+            const initialPage = window.location.hash.substring(1) || 'vision';
+            showPage(initialPage);
+        });
+    </script>   
+        <!-- your existing JavaScript code -->
+    <script>
+       // all your existing 895-line JS code here
+    </script>
+
+    <!-- AI Chatbox -->
+    <div id="godrive-chatbox"></div>
+    <script src="chatbot.js"></script>
+</body>
+</html>
+

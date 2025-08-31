@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GoDrive: The Future of Shared Mobility</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7f9fc;
+        }
+        .text-accent {
+            color: #4a90e2; /* A bright blue accent */
+        }
+        .nav-link.active {
+            color: #1a202c; /* A darker text color for the active link */
+            font-weight: 600;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        th {
+            background-color: #f1f5f9;
+            font-weight: 600;
+            color: #1a202c;
+        }
+        tr:hover {
+            background-color: #f8fafc;
+        }
+        #globe-container {
+            width: 100%;
+            height: 400px;
+            background-color: #1a202c;
+            border-radius: 1.5rem;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body class="text-gray-800 antialiased">
+
+    <!-- Header -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#" class="text-3xl font-bold text-gray-900">Go<span class="text-accent">Drive</span></a>
+            <nav class="hidden md:flex space-x-8 text-lg font-medium">
+                <a href="#vision" class="nav-link text-gray-600 hover:text-accent transition-colors active">Vision</a>
+                <a href="#tripsync" class="nav-link text-gray-600 hover:text-accent transition-colors">TripSync</a>
+                <a href="#fluxload" class="nav-link text-gray-600 hover:text-accent transition-colors">FluxLoad</a>
+                <a href="#comparison" class="nav-link text-gray-600 hover:text-accent transition-colors">Comparison</a>
+                <a href="#contact" class="nav-link text-gray-600 hover:text-accent transition-colors">Contact</a>
+            </nav>
+            <button class="md:hidden text-gray-600 hover:text-accent focus:outline-none">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main id="main-content-area" class="py-16">
+        <!-- Content will be dynamically loaded here by JavaScript -->
+    </main>
+
+    <script>
+        // Global variables for the 3D scene
+        let scene, camera, renderer, globe, connectionsGroup;
+        let mouseX = 0, mouseY = 0;
+        let windowHalfX = window.innerWidth / 2;
+        let windowHalfY = window.innerHeight / 2;
+        let isDragging = false;
+        let previousMousePosition = {
+            x: 0,
+            y: 0
+        };
+
+        const cities = [
+            { name: "New York", lat: 40.7128, lon: -74.0060 },
+            { name: "London", lat: 51.5074, lon: -0.1278 },
+            { name: "Tokyo", lat: 35.6895, lon: 139.6917 },
+            { name: "Sydney", lat: -33.8688, lon: 151.2093 },
+            { name: "Rio de Janeiro", lat: -22.9068, lon: -43.1729 },
+            { name: "Moscow", lat: 55.7558, lon: 37.6173 },
+            { name: "Chennai", lat: 13.0827, lon: 80.2707 },
+            { name: "Dubai", lat: 25.2769, lon: 55.2963 }
+        ];
+
+        // Function to convert latitude and longitude to 3D coordinates
+        function latLonToVector3(lat, lon, radius) {
+            const phi = (90 - lat) * Math.PI / 180;
+            const theta = (lon + 180) * Math.PI / 180;
+            const x = -(radius * Math.sin(phi) * Math.cos(theta));
+            const y = (radius * Math.cos(phi));
+            const z = (radius * Math.sin(phi) * Math.sin(theta));
+            return new THREE.Vector3(x, y, z);
+        }
+
+        function createGlobe(containerId, isTripSync) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(75, container.offsetWidth / container.offsetHeight, 0.1, 1000);
+            renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer.setSize(container.offsetWidth, container.offsetHeight);
+            container.innerHTML = '';
+            container.appendChild(renderer.domElement);
+
+            // Globe
+            const globeGeometry = new THREE.SphereGeometry(100, 64, 64);
+            const globeMaterial = new THREE.MeshBasicMaterial({ color: 0x000033, wireframe: true });
+            globe = new THREE.Mesh(globeGeometry, globeMaterial);
+            scene.add(globe);
+
+            // Add city points
+            const pointsGroup = new THREE.Group();
+            cities.forEach(city => {
+                const position = latLonToVector3(city.lat, city.lon, 101);
+                const geometry = new THREE.SphereGeometry(1, 32, 32);
+                const material = new THREE.MeshBasicMaterial({ color: 0x4a90e2 });
+                const point = new THREE.Mesh(geometry, material);
+                point.position.copy(position);
+                pointsGroup.add(point);
+            });
+            scene.add(pointsGroup);
+
+            // Set camera position
+            camera.position.z = 200;
+
+            // Connections
+            connectionsGroup = new THREE.Group();
+            scene.add(connectionsGroup);
+
+            // Lighting
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+            scene.add(ambientLight);
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+            directionalLight.position.set(0, 1, 1);
+            scene.add(directionalLight);
+
+            // Animation loop
+            const animate = function () {
+                requestAnimationFrame(animate);
+                globe.rotation.y += 0.001;
+                pointsGroup.rotation.y += 0.001;
+                connectionsGroup.rotation.y += 0.001;
+                renderer.render(scene, camera);
+            };
+            animate();
+
+            // Handle window resizing
+            window.addEventListener('resize', () => {
+                camera.aspect = container.offsetWidth / container.offsetHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(container.offsetWidth, container.offsetHeight);
+            });
+
+            // Mouse controls
+            container.addEventListener('mousedown', onDocumentMouseDown, false);
+            container.addEventListener('mousemove', onDocumentMouseMove, false);
+            container.addEventListener('mouseup', onDocumentMouseUp, false);
+            container.addEventListener('mouseout', onDocumentMouseOut, false);
+        }
+
+        function addRandomConnections() {
+            // Clear existing connections
+            while (connectionsGroup.children.length > 0) {
+                connectionsGroup.remove(connectionsGroup.children[0]);
+            }
+
+            const numConnections = 5;
+            for (let i = 0; i < numConnections; i++) {
+                const startIndex = Math.floor(Math.random() * cities.length);
+                let endIndex = Math.floor(Math.random() * cities.length);
+                while (endIndex === startIndex) {
+                    endIndex = Math.floor(Math.random() * cities.length);
+                }
+
+                const startCity = cities[startIndex];
+                const endCity = cities[endIndex];
+
+                const startPoint = latLonToVector3(startCity.lat, startCity.lon, 101);
+                const endPoint = latLonToVector3(endCity.lat, endCity.lon, 101);
+
+                const controlPoint = new THREE.Vector3(
+                    (startPoint.x + endPoint.x) / 2,
+                    (startPoint.y + endPoint.y) / 2,
+                    (startPoint.z + endPoint.z) / 2
+                );
+
+                const curve = new THREE.CubicBezierCurve3(startPoint, controlPoint, controlPoint, endPoint);
+                const points = curve.getPoints(50);
+                const geometry = new THREE.BufferGeometry().setFromPoints(points);
+                const material = new THREE.LineBasicMaterial({ color: 0x4a90e2 });
+                const line = new THREE.Line(geometry, material);
+                connectionsGroup.add(line);
+            }
+        }
+
+        // Mouse control functions
+        function onDocumentMouseDown(event) {
+            isDragging = true;
+            previousMousePosition = {
+                x: event.clientX,
+                y: event.clientY
+            };
+        }
+
+        function onDocumentMouseMove(event) {
+            if (!isDragging) return;
+            const deltaMove = {
+                x: event.clientX - previousMousePosition.x,
+                y: event.clientY - previousMousePosition.y
+            };
+            globe.rotation.y += deltaMove.x * 0.005;
+            globe.rotation.x += deltaMove.y * 0.005;
+            connectionsGroup.rotation.y += deltaMove.x * 0.005;
+            connectionsGroup.rotation.x += deltaMove.y * 0.005;
+            previousMousePosition = {
+                x: event.clientX,
+                y: event.clientY
+            };
+        }
+
+        function onDocumentMouseUp() {
+            isDragging = false;
+        }
+
+        function onDocumentMouseOut() {
+            isDragging = false;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const mainContentArea = document.getElementById('main-content-area');
+            const navLinks = document.querySelectorAll('.nav-link');
+
+            const pages = {
+                vision: `
+                    <section class="bg-gradient-to-r from-blue-700 to-indigo-800 text-white py-24 text-center rounded-3xl mx-4 my-8 shadow-2xl">
+                        <div class="container mx-auto px-6 max-w-4xl">
+                            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold mb-4 leading-tight">The Future of Shared Mobility & Logistics</h1>
+                            <p class="text-lg sm:text-xl lg:text-2xl mb-8 opacity-90">
+                                Revolutionizing urban and inter-city movement by creating a dynamic, peer-to-peer network that seamlessly connects people with rides and packages with reliable transport, leveraging the power of everyday journeys.
+                            </p>
+                        </div>
+                    </section>
+                    <section class="container mx-auto px-6 mt-16 text-center">
+                        <div class="max-w-4xl mx-auto">
+                            <h2 class="text-4xl font-bold mb-6 text-gray-900">Our Mission</h2>
+                            <p class="text-xl text-gray-600 mb-8 leading-relaxed">
+                                To provide a cost-effective, efficient, and community-driven solution for transportation and logistics, empowering individuals to earn passively while offering unparalleled convenience and affordability.
+                            </p>
+                            <h3 class="text-2xl font-bold mb-4 text-gray-900">Core App Design Philosophy: "Effortless Flow & Trusted Connection"</h3>
+                            <p class="text-lg text-gray-600 leading-relaxed mb-6">
+                                GoDrive's design will embody simplicity, elegance, and intuitive functionality. The user interface (UI) will be clean, modern, and highly responsive, prioritizing ease of use for both drivers and users.
+                            </p>
+                            <ul class="text-lg text-gray-600 space-y-4 text-left">
+                                <li class="flex items-start">
+                                    <span class="text-accent mr-3 mt-1"><i class="fas fa-palette text-2xl"></i></span>
+                                    <div>
+                                        <h4 class="font-bold">Aesthetic:</h4>
+                                        <p>Clean lines, modern typography, and a calming color palette (e.g., deep blues, greens, and grays with bright accent colors for calls to action).</p>
+                                    </div>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-accent mr-3 mt-1"><i class="fas fa-compass text-2xl"></i></span>
+                                    <div>
+                                        <h4 class="font-bold">Intuitive Navigation:</h4>
+                                        <p>A unified dashboard upon opening, allowing users to quickly switch between "Ride" (TripSync) and "Send" (FluxLoad) modes. Clear icons and minimal text will guide interaction.</p>
+                                    </div>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-accent mr-3 mt-1"><i class="fas fa-user-circle text-2xl"></i></span>
+                                    <div>
+                                        <h4 class="font-bold">Personalization:</h4>
+                                        <p>User profiles will be engaging and informative, fostering a sense of community. Real-time updates and personalized recommendations will enhance the experience.</p>
+                                    </div>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-accent mr-3 mt-1"><i class="fas fa-map-marked-alt text-2xl"></i></span>
+                                    <div>
+                                        <h4 class="font-bold">Visual Appeal:</h4>
+                                        <p>Interactive maps with smooth animations for route tracking, driver/package location, and hub proximity.</p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </section>
+                `,
+                tripsync: `
+                    <section class="container mx-auto px-6 space-y-12">
+                        <div class="flex flex-col md:flex-row items-center justify-center space-y-8 md:space-y-0 md:space-x-16">
+                            <div class="md:w-1/2">
+                                <img src="https://placehold.co/600x400/8099ff/ffffff?text=TripSync+Map" alt="TripSync Map" class="rounded-3xl shadow-xl transform hover:scale-105 transition-transform duration-300">
+                            </div>
+                            <div class="md:w-1/2">
+                                <h2 class="text-4xl font-bold mb-4 text-gray-900">Trip<span class="text-accent">Sync</span>: Shared Human Mobility</h2>
+                                <p class="text-gray-600 text-lg mb-6 leading-relaxed">
+                                    TripSync is our peer-to-peer ride-sharing service, empowering drivers to monetize their existing commutes and errands, while offering riders a significantly more affordable and community-focused alternative to traditional ride-hailing services.
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <!-- World Map Connector Visualization -->
+                        <div class="bg-white p-8 rounded-3xl shadow-lg border border-gray-200 text-center">
+                            <h3 class="text-2xl font-bold mb-4 text-gray-900">Visualizing the TripSync Network</h3>
+                            <p class="text-gray-600 mb-6">See how GoDrive's peer-to-peer network connects people across the globe with our dynamic "world map connector." Click "Connect" to visualize the flow of shared rides.</p>
+                            <div id="globe-container" class="my-6"></div>
+                            <button id="connect-button" class="bg-blue-600 text-white p-4 rounded-full font-bold hover:bg-blue-700 transition-colors">Connect</button>
+                        </div>
+
+                        <div class="bg-white p-8 rounded-3xl shadow-lg border border-gray-200">
+                            <h3 class="text-2xl font-bold mb-4 text-gray-900">Key Features & Design Elements</h3>
+                            <div class="grid md:grid-cols-2 gap-8">
+                                <div>
+                                    <h4 class="text-xl font-semibold text-accent mb-2">Dynamic Route & Smart Match Algorithm</h4>
+                                    <ul class="list-disc list-inside text-gray-600 space-y-2">
+                                        <li><strong class="font-semibold">Driver Control:</strong> Drivers post their planned route and a "willingness radius" to find matches.</li>
+                                        <li><strong class="font-semibold">Intelligent Matching:</strong> Our algorithm identifies drivers whose flexible paths intersect with the rider's desired route, calculating a minimal detour.</li>
+                                        <li><strong class="font-semibold">Visual Representation:</strong> Interactive maps show the original route and the proposed adjusted route.</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h4 class="text-xl font-semibold text-accent mb-2">Flexible Pickup/Drop-off (Short vs. Long Distance)</h4>
+                                    <ul class="list-disc list-inside text-gray-600 space-y-2">
+                                        <li><strong class="font-semibold">Short-Distance (Intra-City):</strong> Direct door-to-door or near-door service.</li>
+                                        <li><strong class="font-semibold">Long-Distance (Inter-City/State):</strong> Pickups and drop-offs at designated, secure "TripSync Hubs" in major areas.</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h4 class="text-xl font-semibold text-accent mb-2">Fair and Transparent Pricing Model</h4>
+                                    <ul class="list-disc list-inside text-gray-600 space-y-2">
+                                        <li><strong class="font-semibold">Dynamic Margin System:</strong> Pricing is based on a transparent margin system, with costs calculated from distance, time, riders, and vehicle class.</li>
+                                        <li><strong class="font-semibold">Affordability:</strong> Always positioned as significantly more affordable than traditional ride-hailing.</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h4 class="text-xl font-semibold text-accent mb-2">Reciprocal Ride System & Trusted Circles</h4>
+                                    <ul class="list-disc list-inside text-gray-600 space-y-2">
+                                        <li><strong class="font-semibold">Incentive Program:</strong> Drivers earn "Ride Credits" for every trip.</li>
+                                        <li><strong class="font-semibold">Credit Redemption:</strong> Credits can be used to subsidize or fully pay for their own rides.</li>
+                                        <li><strong class="font-semibold">Trusted Circles:</strong> Create or join verified groups to prioritize matches within your social or professional network.</li>
+                                        <li><strong class="font-semibold">Community Badges:</strong> Earn badges to build credibility and trust within the network.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                `,
+                fluxload: `
+                    <section class="container mx-auto px-6 space-y-12">
+                        <div class="flex flex-col md:flex-row-reverse items-center justify-center space-y-8 md:space-y-0 md:space-x-16">
+                            <div class="md:w-1/2">
+                                <img src="https://placehold.co/600x400/8099ff/ffffff?text=FluxLoad+Hub" alt="FluxLoad Hub" class="rounded-3xl shadow-xl transform hover:scale-105 transition-transform duration-300">
+                            </div>
+                            <div class="md:w-1/2">
+                                <h2 class="text-4xl font-bold mb-4 text-gray-900">Flux<span class="text-accent">Load</span>: Shared Logistics</h2>
+                                <p class="text-gray-600 text-lg mb-6 leading-relaxed">
+                                    FluxLoad transforms our network of everyday drivers into a distributed, flexible logistics solution, enabling cost-effective, hub-based transportation of packages, leveraging the unused capacity of vehicles already on the road.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- World Map Connector Visualization -->
+                        <div class="bg-white p-8 rounded-3xl shadow-lg border border-gray-200 text-center">
+                            <h3 class="text-2xl font-bold mb-4 text-gray-900">Visualizing the FluxLoad Network</h3>
+                            <p class="text-gray-600 mb-6">Explore the global reach of our shared logistics network on the interactive globe below. Click "Connect" to see how packages flow between our hubs.</p>
+                            <div id="globe-container" class="my-6"></div>
+                            <button id="connect-button" class="bg-blue-600 text-white p-4 rounded-full font-bold hover:bg-blue-700 transition-colors">Connect</button>
+                        </div>
+
+                        <div class="bg-white p-8 rounded-3xl shadow-lg border border-gray-200">
+                            <h3 class="text-2xl font-bold mb-4 text-gray-900">Key Features & Design Elements</h3>
+                            <div class="grid md:grid-cols-2 gap-8">
+                                <div>
+                                    <h4 class="text-xl font-semibold text-accent mb-2">Hub-Centric Logistics Model</h4>
+                                    <ul class="list-disc list-inside text-gray-600 space-y-2">
+                                        <li><strong class="font-semibold">Extensive Hub Network:</strong> A wide network of "FluxLoad Hubs" serves as drop-off and pickup points.</li>
+                                        <li><strong class="font-semibold">Driver-Led Picking:</strong> Drivers can browse available packages based on their planned route.</li>
+                                        <li><strong class="font-semibold">Visual Hub Map:</strong> An interactive map shows all available FluxLoad Hubs and their details.</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h4 class="text-xl font-semibold text-accent mb-2">Diverse Parcel Types & Restrictions</h4>
+                                    <ul class="list-disc list-inside text-gray-600 space-y-2">
+                                        <li><strong class="font-semibold">Non-Perishable Focus:</strong> Strictly limited to non-perishable, non-hazardous, and non-time-sensitive items.</li>
+                                        <li><strong class="font-semibold">Size & Weight Limits:</strong> Clear guidelines ensure packages fit in standard passenger vehicles.</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h4 class="text-xl font-semibold text-accent mb-2">Enhanced Security & Tracking (at Hubs)</h4>
+                                    <ul class="list-disc list-inside text-gray-600 space-y-2">
+                                        <li><strong class="font-semibold">Identity Verification:</strong> Both senders and receivers must verify their identity at the hub.</li>
+                                        <li><strong class="font-semibold">QR Code Tracking:</strong> Each package receives a unique QR code for real-time, end-to-end tracking.</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h4 class="text-xl font-semibold text-accent mb-2">Driver Earning & Motivation</h4>
+                                    <ul class="list-disc list-inside text-gray-600 space-y-2">
+                                        <li><strong class="font-semibold">Passive Income:</strong> Drivers earn a commission for each package transported.</li>
+                                        <li><strong class="font-semibold">"Load Alerts":</strong> Drivers can receive alerts for packages that match their planned routes.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                `,
+                comparison: `
+                    <section class="container mx-auto px-6 space-y-12">
+                        <h2 class="text-4xl font-bold mb-4 text-center text-gray-900">How We Compare: TripSync vs. Others</h2>
+                        <div class="bg-white p-6 rounded-lg shadow-lg overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead>
+                                    <tr>
+                                        <th class="py-3 text-left">Feature</th>
+                                        <th class="py-3 text-left">GoDrive: TripSync</th>
+                                        <th class="py-3 text-left">Uber/Ola (Ride-Hailing)</th>
+                                        <th class="py-3 text-left">BlaBlaCar (Long-Distance)</th>
+                                        <th class="py-3 text-left">Waze Carpool (Commute-Focused)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Driver's Motivation</td>
+                                        <td>Passive Income/Expense Offset: Casual drivers monetizing existing trips.</td>
+                                        <td>Professional Income: Dedicated drivers, primary income source.</td>
+                                        <td>Cost Sharing: Offsetting personal trip costs, not profiting.</td>
+                                        <td>Cost Sharing: Strictly for offsetting commute costs.</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Trip Type & Range</td>
+                                        <td>Hybrid (Local & Inter-State): One platform for all distances, leveraging flexible routes.</td>
+                                        <td>Primarily Local & On-Demand: Short-to-medium urban trips.</td>
+                                        <td>Planned & Long-Distance: Inter-city/state travel only.</td>
+                                        <td>Structured Commutes: Fixed daily work/home routes.</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Booking & Matching</td>
+                                        <td>"Driver-First" Posting + "Smart Match": Drivers post flexible routes; algorithm finds optimal matches.</td>
+                                        <td>"Rider-First" Request: Immediate, on-demand driver dispatch.</td>
+                                        <td>"Driver-First" Posting: Drivers post planned trips; riders book seats.</td>
+                                        <td>"Driver-First" Posting: Drivers list commutes; riders request to join.</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Pricing Model</td>
+                                        <td>Dynamic, Margin-Based: Transparent sharing, always more affordable than cabs.</td>
+                                        <td>Dynamic & High-Margin: Surge pricing, maximizing company/driver profit.</td>
+                                        <td>Fixed & Cost-Based: Minimal, cost-covering, low profit.</td>
+                                        <td>Very Low-Cost: Near-gas-only cost, minimal fees.</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Community & Trust</td>
+                                        <td>"Trusted Circles" & Social Integration: Prioritized matches within verified networks, badges.</td>
+                                        <td>Rating System: Basic two-way rating.</td>
+                                        <td>Extensive Profiles & Reviews: Community vetting for long journeys.</td>
+                                        <td>Limited Trusted Circles: Within company/school only.</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Key Differentiator</td>
+                                        <td>Flexibility (Dynamic Route): Driver's route can flex slightly, allowing optimal, low-impact detours. Unified Local/Long-Distance Hubs.</td>
+                                        <td>Immediate On-Demand: Instant ride availability.</td>
+                                        <td>Affordable Long-Distance: Budget travel for pre-planned journeys.</td>
+                                        <td>Strictly Commuting: Hyper-focused on daily work travel.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <h2 class="text-4xl font-bold mt-16 mb-4 text-center text-gray-900">How We Compare: FluxLoad vs. Others</h2>
+                        <div class="bg-white p-6 rounded-lg shadow-lg overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead>
+                                    <tr>
+                                        <th class="py-3 text-left">Feature</th>
+                                        <th class="py-3 text-left">GoDrive: FluxLoad</th>
+                                        <th class="py-3 text-left">Traditional Courier Services</th>
+                                        <th class="py-3 text-left">Hyper-local Delivery</th>
+                                        <th class="py-3 text-left">E-commerce Logistics</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Worker Type & Motivation</td>
+                                        <td>Casual, Non-Professional Drivers: Monetizing existing trips with unused vehicle space.</td>
+                                        <td>Professional Couriers: Dedicated, full-time delivery personnel.</td>
+                                        <td>Gig Workers (Dedicated): On-demand, dedicated delivery personnel.</td>
+                                        <td>Dedicated Logistics Network: Full-time, specialized delivery force.</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Delivery Model</td>
+                                        <td>Hub-to-Hub Network: Packages dropped/picked up at secure hubs, following driver's existing route.</td>
+                                        <td>Door-to-Door: Direct pickup from sender, direct delivery to recipient.</td>
+                                        <td>Point-to-Point (Door-to-Door): Usually within short radius, direct.</td>
+                                        <td>Warehouse-to-Door/Hub-to-Door: Highly optimized, large-scale direct delivery.</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Cost & Pricing</td>
+                                        <td>Significantly Lower: Affordable, flexible, shared-load pricing. Ideal for non-urgent.</td>
+                                        <td>Fixed & Higher: Premium for speed, reliability, and guaranteed service.</td>
+                                        <td>Medium-High: Priced for speed and on-demand convenience within a city.</td>
+                                        <td>Integrated into Product Cost: Optimized for volume, generally low cost for consumer.</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Speed & Guarantee</td>
+                                        <td>Flexible, No Guaranteed Time: Delivery time dependent on driver's schedule and hub transfers.</td>
+                                        <td>Guaranteed & Timed: Offers specific, firm delivery windows (e.g., next-day, same-day).</td>
+                                        <td>Fast & On-Demand: Delivered within minutes/hours.</td>
+                                        <td>Fast & Scheduled: Often same-day/next-day, with tracking.</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Package Type</td>
+                                        <td>Non-Perishable, Non-Urgent: Documents, clothing, small electronics, non-fragile items.</td>
+                                        <td>Any Type: Valuables, perishables, fragile, documents, etc.</td>
+                                        <td>Varied (Small): Food, groceries, small items, some documents.</td>
+                                        <td>Varied (Large Scale): Consumer goods, any type of e-commerce item.</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Key Differentiator</td>
+                                        <td>Passive Shared-Load Hub Logistics: Low-cost, flexible transport leveraging existing travel patterns. Integrated with human transport.</td>
+                                        <td>Dedicated Commercial Logistics: Premium, direct, guaranteed, and secure.</td>
+                                        <td>On-Demand Micro-Delivery: Fast, local, direct for small items.</td>
+                                        <td>Volume-Based E-commerce Fulfillment: Highly efficient, large-scale distribution.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+                `,
+                contact: `
+                    <footer class="bg-gray-100 text-gray-800 py-12 rounded-3xl mx-4 my-8 shadow-2xl">
+                        <div class="container mx-auto px-6 text-center">
+                            <h3 class="text-3xl font-bold mb-4">Join the Movement</h3>
+                            <p class="text-gray-600 mb-8 max-w-2xl mx-auto">
+                                Be a part of the future of shared mobility and logistics. Sign up for updates and be the first to know when we launch.
+                            </p>
+                            <form class="max-w-md mx-auto">
+                                <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+                                    <input type="email" placeholder="Enter your email" class="w-full p-4 rounded-full text-gray-800 focus:outline-none focus:ring-4 focus:ring-blue-500 transition-shadow">
+                                    <button type="submit" class="bg-blue-600 text-white p-4 rounded-full font-bold hover:bg-blue-700 transition-colors">Subscribe</button>
+                                </div>
+                            </form>
+                            <div class="mt-10 text-sm text-gray-500">
+                                &copy; 2024 GoDrive. All rights reserved.
+                            </div>
+                        </div>
+                    </footer>
+                `
+            };
+
+            function showPage(pageName) {
+                mainContentArea.innerHTML = pages[pageName];
+                navLinks.forEach(link => {
+                    if (link.getAttribute('href').substring(1) === pageName) {
+                        link.classList.add('active');
+                    } else {
+                        link.classList.remove('active');
+                    }
+                });
+
+                // Initialize the globe and add event listener for the button
+                if (pageName === 'tripsync' || pageName === 'fluxload') {
+                    const containerId = 'globe-container';
+                    createGlobe(containerId);
+                    document.getElementById('connect-button').addEventListener('click', () => {
+                        addRandomConnections();
+                    });
+                }
+            }
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', (event) => {
+                    event.preventDefault();
+                    const pageName = link.getAttribute('href').substring(1);
+                    showPage(pageName);
+                });
+            });
+
+            // Set initial page based on URL hash or default to 'vision'
+            const initialPage = window.location.hash.substring(1) || 'vision';
+            showPage(initialPage);
+        });
+    </script>
+</body>
+</html>
